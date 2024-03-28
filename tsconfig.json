@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "NodeNext",
+        "target": "ESNext",
+        "moduleResolution": "NodeNext",
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "removeComments": true,
+        "rootDir": "./src",
+        "outDir": "./app",
+        "sourceMap": true
+    },
+    "include": ["./src/**/*"],
+    "exclude": ["./node_modules/**/*"]
+}
