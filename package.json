@@ -1,0 +1,21 @@
+{
+    "name": "arbot-scraper",
+    "version": "1.0.0",
+    "author": "Kaltzisp",
+    "description": "Arbot API scraper.",
+    "main": "src/main.ts",
+    "type": "module",
+    "engines": {
+        "node": "20.x"
+    },
+    "scripts": {
+        "build": "rm -rf app/* && tsc -p tsconfig.json"
+    },
+    "devDependencies": {
+        "@types/node": "latest",
+        "@typescript-eslint/eslint-plugin": "latest",
+        "@typescript-eslint/parser": "latest",
+        "eslint": "latest",
+        "typescript": "latest"
+    }
+}
