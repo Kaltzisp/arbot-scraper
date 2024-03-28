@@ -8,6 +8,7 @@
     "globals": {
         "process": "readonly"
     },
+    "ignorePatterns": ["legacy_src"],
     "root": true,
     "rules": {
         "array-element-newline": ["error", "consistent"],
@@ -41,6 +42,7 @@
         "quote-props": ["error", "consistent-as-needed"],
         "sort-imports": ["error", { "allowSeparatedGroups": true }],
         "sort-keys": "off",
+        "@typescript-eslint/class-methods-use-this": "off",
         "@typescript-eslint/consistent-indexed-object-style": [
             "error",
             "index-signature"
