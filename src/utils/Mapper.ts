@@ -16,7 +16,7 @@ const MAPPINGS: Mappings = {
         "Port Adelaide Power": ["Port Adelaide Power"],
         "Richmond Tigers": ["Richmond Tigers"],
         "St Kilda Saints": ["St Kilda Saints"],
-        "Sydney Swans": ["Sydney Swans"],
+        "Sydney Swans": ["Sydney Swans", "Sydney", "Swans"],
         "West Coast Eagles": ["West Coast Eagles"],
         "Western Bulldogs": ["Western Bulldogs", "Wst Bulldogs"]
     },
@@ -62,7 +62,7 @@ for (const compId in MAPPINGS) {
 export function mapRunner(compId: string, alias: string): string {
     const id = aliasToId(alias);
     if (runnerMap[compId]) {
-        const mappedName = runnerMap[compId]!.get(Array.from(runnerMap[compId]!.keys()).find(name => name.includes(id))!);
+        const mappedName = runnerMap[compId]!.has(id) ? runnerMap[compId]!.get(id) : runnerMap[compId]!.get(Array.from(runnerMap[compId]!.keys()).find(name => name.includes(id))!);
         const line = (/[+-]?[\d.]+$/u).exec(alias.replace(/[()]/gu, ""));
         if (mappedName && !line) {
             return mappedName;
@@ -74,7 +74,7 @@ export function mapRunner(compId: string, alias: string): string {
     if (id !== "over" && id !== "under") {
         console.error(`Alias not mapped: ${id}`);
     }
-    return alias;
+    return alias.replace(/[()]/gu, "");
 }
 
 interface RunnerMap {
