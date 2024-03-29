@@ -45,7 +45,6 @@ export class Sportsbet extends Scraper {
         const selectedMarkets = ["Top Markets", "Handicap Markets", "Total Points Markets"];
         const marketGroups = data.marketGrouping.filter(market => selectedMarkets.includes(market.name));
         for (const marketType of marketGroups) {
-            console.log("Requesting...");
             await new Promise((resolve) => { setTimeout(resolve, 500); });
             marketRequests.push((Scraper.getDataFromUrl(`https://www.sportsbet.com.au/apigw/sportsbook-sports/${marketType.httpLink}`) as Promise<MarketsResponse[]>).then((matchMarkets) => {
                 for (const market of matchMarkets) {
