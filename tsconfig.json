@@ -8,8 +8,7 @@
         "strictNullChecks": true,
         "removeComments": true,
         "rootDir": "./src",
-        "outDir": "./app",
-        "sourceMap": true
+        "outDir": "./app"
     },
     "include": ["./src/**/*"],
     "exclude": ["./node_modules/**/*"]

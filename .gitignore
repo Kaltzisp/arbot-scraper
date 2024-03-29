@@ -1,3 +1,6 @@
 # Dev files.
 .vscode
 node_modules
+
+# Build files.
+app
