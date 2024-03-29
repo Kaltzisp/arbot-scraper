@@ -21,6 +21,7 @@ export class Pointsbet extends Scraper {
         const promises: Promise<void>[] = [];
         for (const event of data.events) {
             const match = new Match(
+                compId,
                 event.homeTeam,
                 event.awayTeam,
                 Date.parse(event.startsAt)

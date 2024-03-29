@@ -21,6 +21,7 @@ export class Playup extends Scraper {
         const promises: Promise<void>[] = [];
         for (const event of data.data) {
             const match = new Match(
+                compId,
                 event.attributes.participants[0].is_home ? event.attributes.participants[0].name : event.attributes.participants[1].name,
                 event.attributes.participants[0].is_home ? event.attributes.participants[1].name : event.attributes.participants[0].name,
                 Date.parse(event.attributes.start_time)

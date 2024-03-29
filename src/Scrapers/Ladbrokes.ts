@@ -24,6 +24,7 @@ export class Ladbrokes extends Scraper {
             if (event.event_type.name === "Match" && !event.name.includes("Specials")) {
                 const teams = event.name.split(" vs ");
                 const match = new Match(
+                    compId,
                     teams[0],
                     teams[1],
                     Date.parse(event.actual_start)

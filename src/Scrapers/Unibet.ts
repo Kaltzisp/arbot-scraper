@@ -21,6 +21,7 @@ export class Unibet extends Scraper {
         const promises: Promise<void>[] = [];
         for (const event of data.layout.sections[1].widgets[0].matches.events) {
             const match = new Match(
+                compId,
                 event.event.homeName,
                 event.event.awayName,
                 Date.parse(event.event.start)

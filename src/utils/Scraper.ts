@@ -1,3 +1,5 @@
+import { mapRunner } from "./Mapper.js";
+
 export abstract class Scraper {
 
     protected readonly data: BookieData;
@@ -50,11 +52,18 @@ export abstract class Scraper {
 }
 
 export class Match {
+
     public readonly matchId: string;
+    public readonly homeTeam: string;
+    public readonly awayTeam: string;
     public offers: Offers = {};
-    public constructor(public homeTeam: string, public awayTeam: string, public startTime: number) {
+
+    public constructor(compId: string, homeTeam: string, awayTeam: string, public startTime: number) {
+        this.homeTeam = mapRunner(compId, homeTeam);
+        this.awayTeam = mapRunner(compId, awayTeam);
         this.matchId = `${this.homeTeam} vs ${this.awayTeam}`;
     }
+
 }
 
 export interface MarketData {
