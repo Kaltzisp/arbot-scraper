@@ -43,7 +43,7 @@
         "sort-imports": ["error", { "allowSeparatedGroups": true }],
         "sort-keys": "off",
         "@typescript-eslint/class-methods-use-this": "off",
-        "@typescript-eslint/consistent-indexed-object-style": "error",
+        "@typescript-eslint/consistent-indexed-object-style": "off",
         "@typescript-eslint/consistent-type-imports": [
             "error",
             { "fixStyle": "inline-type-imports" }
