@@ -23,6 +23,7 @@
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "max-depth": ["error", 5],
         "linebreak-style": "off",
+        "max-classes-per-file": ["error", 2],
         "max-len": ["error", 250],
         "max-statements": "off",
         "multiline-comment-style": "off",
