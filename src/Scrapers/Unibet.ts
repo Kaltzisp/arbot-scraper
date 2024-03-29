@@ -34,7 +34,7 @@ export class Unibet extends Scraper {
                 comp.matches.push(match);
             }));
         }
-
+        await Promise.all(promises);
         return comp;
     }
 
@@ -60,16 +60,15 @@ export class Unibet extends Scraper {
     }
 
     protected parseMarketName(name: string): string | false {
-        if (name === "Including Overtime") {
+        if (name === "Regular Time" || name === "Including Overtime") {
             return "HeadToHead";
-        } else if (name === "Handicap - Including Overtime") {
+        } else if (name === "Handicap" || name === "Handicap - Including Overtime") {
             return "Lines";
-        } else if (name === "Total Points - Including Overtime") {
+        } else if (name === "Total Points" || name === "Total Points - Including Overtime") {
             return "Totals";
         }
         return false;
     }
-
 }
 
 interface MatchesResponse {
