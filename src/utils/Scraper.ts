@@ -71,5 +71,5 @@ export interface Offers {
     [marketName: string]: {
         runnerName: string;
         runnerOdds: number;
-    }[];
+    }[] | undefined;
 }
