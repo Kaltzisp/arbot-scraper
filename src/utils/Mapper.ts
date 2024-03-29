@@ -63,9 +63,12 @@ export function mapRunner(compId: string, alias: string): string {
     const id = aliasToId(alias);
     if (runnerMap[compId]) {
         const mappedName = runnerMap[compId]!.get(Array.from(runnerMap[compId]!.keys()).find(name => name.includes(id))!);
-        const runnerModifier = (/[+-]?[\d.]+$/u).exec(alias.replace(/[()]/gu, ""));
-        if (mappedName) {
-            return runnerModifier ? `${mappedName} ${runnerModifier}` : mappedName;
+        const line = (/[+-]?[\d.]+$/u).exec(alias.replace(/[()]/gu, ""));
+        if (mappedName && !line) {
+            return mappedName;
+        } else if (mappedName) {
+            const modifier = parseFloat(line![0]);
+            return modifier > 0 ? `${mappedName} +${modifier}` : `${mappedName} ${modifier}`;
         }
     }
     if (id !== "over" && id !== "under") {

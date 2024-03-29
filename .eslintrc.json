@@ -40,6 +40,7 @@
         ],
         "one-var": ["error", "never"],
         "padded-blocks": ["off"],
+        "prefer-named-capture-group": "off",
         "quote-props": ["error", "consistent-as-needed"],
         "sort-imports": ["error", { "allowSeparatedGroups": true }],
         "sort-keys": "off",
