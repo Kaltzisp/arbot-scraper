@@ -42,7 +42,7 @@ export class Sportsbet extends Scraper {
         const data = await Scraper.getDataFromUrl(url) as MatchMarketsResponse;
         const offers: Offers = {};
         const marketRequests = [];
-        const selectedMarkets = ["Top Markets", "Total Points Markets", "Handicap Markets"];
+        const selectedMarkets = ["Top Markets", "Handicap Markets", "Total Points Markets"];
         const marketGroups = data.marketGrouping.filter(market => selectedMarkets.includes(market.name));
         for (const marketType of marketGroups) {
             console.log("Requesting...");
