@@ -47,7 +47,13 @@ export abstract class Scraper {
 
 }
 
-
+export class Match {
+    public readonly matchId: string;
+    public readonly offers: Offers = {};
+    public constructor(public homeTeam: string, public awayTeam: string, public startTime: number) {
+        this.matchId = `${this.homeTeam} vs ${this.awayTeam}`;
+    }
+}
 
 export interface BookieData {
     bookieId: string;
@@ -59,14 +65,6 @@ export interface BookieData {
 export interface CompData {
     compId: string;
     matches: Match[];
-}
-
-export interface Match {
-    matchId: string;
-    homeTeam: string;
-    awayTeam: string;
-    startTime: number;
-    offers: Offers;
 }
 
 export interface Offers {
