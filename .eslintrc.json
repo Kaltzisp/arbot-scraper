@@ -23,7 +23,7 @@
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "max-depth": ["error", 5],
         "linebreak-style": "off",
-        "max-len": ["error", 200],
+        "max-len": ["error", 250],
         "max-statements": "off",
         "multiline-comment-style": "off",
         "newline-per-chained-call": "off",
@@ -43,10 +43,7 @@
         "sort-imports": ["error", { "allowSeparatedGroups": true }],
         "sort-keys": "off",
         "@typescript-eslint/class-methods-use-this": "off",
-        "@typescript-eslint/consistent-indexed-object-style": [
-            "error",
-            "index-signature"
-        ],
+        "@typescript-eslint/consistent-indexed-object-style": "error",
         "@typescript-eslint/consistent-type-imports": [
             "error",
             { "fixStyle": "inline-type-imports" }
