@@ -1,6 +1,14 @@
-import type { BookieData } from "./utils/Scraper.js";
+// Imports.
+import type { MarketData } from "./utils/Scraper.js";
+import { writeFileSync } from "fs";
+
+// Scrapers.
+import { Ladbrokes } from "./Scrapers/Ladbrokes.js";
+import { Playup } from "./Scrapers/Playup.js";
 import { Pointsbet } from "./Scrapers/Pointsbet.js";
 
+
+/** Gets the market data from the bookie APIs. */
 async function scrapeAll(): Promise<MarketData> {
 
     // Initialising market data.
@@ -13,6 +21,8 @@ async function scrapeAll(): Promise<MarketData> {
 
     // Collecting scrapers.
     const scrapers = [
+        new Ladbrokes(),
+        new Playup(),
         new Pointsbet()
     ];
 
@@ -31,16 +41,13 @@ async function scrapeAll(): Promise<MarketData> {
 
 }
 
-// Running webscraper.
-scrapeAll().then((marketData) => {
-    console.log(marketData);
-}).catch((e: unknown) => {
-    console.error(e);
-});
-
-interface MarketData {
-    meta: {
-        scrapedAt: number;
-    };
-    data: BookieData[];
+// Running webscraper on AWS Lambda.
+export async function handler(event: unknown): Promise<MarketData> {
+    console.log(event);
+    const marketData = await scrapeAll();
+    return marketData;
 }
+
+// Running test instance.
+const data = await scrapeAll();
+writeFileSync("./marketData.json", JSON.stringify(data));
