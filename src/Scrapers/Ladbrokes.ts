@@ -43,7 +43,13 @@ export class Ladbrokes extends Scraper {
     }
 
     protected async scrapeMarkets(compId: string, url: string): Promise<Offers> {
-        const data = await Scraper.getDataFromUrl(url) as MarketsResponse;
+        const options: RequestInit = {
+            headers: {
+                Origin: "https://www.ladbrokes.com.au",
+                Referer: "https://www.ladbrokes.com.au/"
+            }
+        };
+        const data = await Scraper.getDataFromUrl(url, options) as MarketsResponse;
         const offers: Offers = {};
         for (const runnerId in data.entrants) {
             const runner = data.entrants[runnerId];

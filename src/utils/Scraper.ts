@@ -18,8 +18,8 @@ export abstract class Scraper {
         };
     }
 
-    protected static async getDataFromUrl(url: string): Promise<unknown> {
-        const response = await fetch(url).catch((e: unknown) => {
+    protected static async getDataFromUrl(url: string, options?: RequestInit): Promise<unknown> {
+        const response = await fetch(url, options ?? {}).catch((e: unknown) => {
             console.error(e);
             throw new Error(`Failed to fetch data from ${url}`);
         });
