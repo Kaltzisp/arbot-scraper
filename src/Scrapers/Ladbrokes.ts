@@ -21,7 +21,7 @@ export class Ladbrokes extends Scraper {
         const promises: Promise<void>[] = [];
         for (const eventId in data.events) {
             const event = data.events[eventId];
-            if (event.event_type.name === "Match") {
+            if (event.event_type.name === "Match" && !event.name.includes("Specials")) {
                 const teams = event.name.split(" vs ");
                 const match = new Match(
                     teams[0],
