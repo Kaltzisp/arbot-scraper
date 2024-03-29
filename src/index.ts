@@ -6,6 +6,8 @@ import { writeFileSync } from "fs";
 import { Ladbrokes } from "./Scrapers/Ladbrokes.js";
 import { Playup } from "./Scrapers/Playup.js";
 import { Pointsbet } from "./Scrapers/Pointsbet.js";
+import { Tabcorp } from "./Scrapers/Tabcorp.js";
+import { Unibet } from "./Scrapers/Unibet.js";
 
 
 /** Gets the market data from the bookie APIs. */
@@ -23,7 +25,9 @@ async function scrapeAll(): Promise<MarketData> {
     const scrapers = [
         new Ladbrokes(),
         new Playup(),
-        new Pointsbet()
+        new Pointsbet(),
+        new Tabcorp(),
+        new Unibet()
     ];
 
     // Scraping market data.

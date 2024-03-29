@@ -19,7 +19,7 @@ const MAPPINGS: Mappings = {
         "St Kilda Saints": ["St Kilda Saints"],
         "Sydney Swans": ["Sydney Swans"],
         "West Coast Eagles": ["West Coast Eagles"],
-        "Western Bulldogs": ["Western Bulldogs"]
+        "Western Bulldogs": ["Western Bulldogs", "Wst Bulldogs"]
     },
     NRL: {
         "Brisbane Broncos": ["Brisbane Broncos"],
