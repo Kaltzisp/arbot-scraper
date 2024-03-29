@@ -43,9 +43,11 @@ export class Pointsbet extends Scraper {
         for (const market of data.fixedOddsMarkets) {
             const marketName = this.parseMarketName(market.name);
             if (marketName) {
-                offers[marketName] = [];
+                if (!offers[marketName]) {
+                    offers[marketName] = [];
+                }
                 for (const runner of market.outcomes) {
-                    offers[marketName].push({
+                    offers[marketName]!.push({
                         runnerName: mapRunner(compId, runner.name),
                         runnerOdds: runner.price
                     });
