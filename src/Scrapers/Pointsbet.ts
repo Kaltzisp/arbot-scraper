@@ -62,9 +62,9 @@ export class Pointsbet extends Scraper {
         if (name.startsWith("Match Result")) {
             return "HeadToHead";
         } else if (name.startsWith("Pick Your Own Line")) {
-            return "Lines"
+            return "Lines";
         } else if (name.startsWith("Alternate Total")) {
-            return "Totals"
+            return "Totals";
         }
         return false;
     }

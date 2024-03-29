@@ -65,9 +65,9 @@ export class Ladbrokes extends Scraper {
         if (name === "Match Betting") {
             return "HeadToHead";
         } else if (name.endsWith("Alternate Handicaps")) {
-            return "Lines"
+            return "Lines";
         } else if (name.startsWith("Alternate Total Points")) {
-            return "Totals"
+            return "Totals";
         }
         return false;
     }
