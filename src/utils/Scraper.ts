@@ -21,7 +21,9 @@ export abstract class Scraper {
             console.error(e);
             throw new Error(`Failed to fetch data from ${url}`);
         });
-        const data = await response.json() as unknown;
+        const data = await response.json().catch((e: unknown) => {
+            console.error(e);
+        }) as unknown;
         return data;
     }
 
