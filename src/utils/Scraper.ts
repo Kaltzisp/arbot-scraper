@@ -55,6 +55,13 @@ export class Match {
     }
 }
 
+export interface MarketData {
+    meta: {
+        scrapedAt: number;
+    };
+    data: BookieData[];
+}
+
 export interface BookieData {
     bookieId: string;
     sports: {
