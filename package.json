@@ -8,6 +8,10 @@
     "engines": {
         "node": "20.x"
     },
+    "scripts": {
+        "build": "rm -rf app/* && npx tsc -p tsconfig.json",
+        "zip": "7z a -tzip -r -w webscraper.zip ./package.json ./app/* ./node_modules"
+    },
     "devDependencies": {
         "@types/node": "latest",
         "@typescript-eslint/eslint-plugin": "latest",
