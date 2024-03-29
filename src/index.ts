@@ -6,6 +6,7 @@ import { writeFileSync } from "fs";
 import { Ladbrokes } from "./Scrapers/Ladbrokes.js";
 import { Playup } from "./Scrapers/Playup.js";
 import { Pointsbet } from "./Scrapers/Pointsbet.js";
+import { Sportsbet } from "./Scrapers/Sportsbet.js";
 import { Tabcorp } from "./Scrapers/Tabcorp.js";
 import { Unibet } from "./Scrapers/Unibet.js";
 
@@ -26,6 +27,7 @@ async function scrapeAll(): Promise<MarketData> {
         new Ladbrokes(),
         new Playup(),
         new Pointsbet(),
+        new Sportsbet(),
         new Tabcorp(),
         new Unibet()
     ];
