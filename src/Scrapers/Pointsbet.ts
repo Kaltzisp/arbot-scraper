@@ -1,4 +1,4 @@
-import { type CompData, type Match, type Offers, Scraper, } from "../utils/Scraper.js";
+import { type CompData, Match, type Offers, Scraper, } from "../utils/Scraper.js";
 import { mapRunner } from "../utils/Mapper.js";
 
 export class Pointsbet extends Scraper {
@@ -20,13 +20,11 @@ export class Pointsbet extends Scraper {
         };
         const promises: Promise<void>[] = [];
         for (const event of data.events) {
-            const match: Match = {
-                matchId: `${event.homeTeam} vs ${event.awayTeam}`,
-                homeTeam: event.homeTeam,
-                awayTeam: event.awayTeam,
-                startTime: Date.parse(event.startsAt),
-                offers: {}
-            };
+            const match = new Match(
+                event.homeTeam,
+                event.awayTeam,
+                Date.parse(event.startsAt)
+            );
             promises.push(this.scrapeMarkets(compId, `https://api.au.pointsbet.com/api/mes/v3/events/${event.key}`).then((matchOffers) => {
                 match.offers = matchOffers;
                 comp.matches.push(match);

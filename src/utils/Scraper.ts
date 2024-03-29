@@ -49,7 +49,7 @@ export abstract class Scraper {
 
 export class Match {
     public readonly matchId: string;
-    public readonly offers: Offers = {};
+    public offers: Offers = {};
     public constructor(public homeTeam: string, public awayTeam: string, public startTime: number) {
         this.matchId = `${this.homeTeam} vs ${this.awayTeam}`;
     }
