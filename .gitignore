@@ -1,10 +1,11 @@
+# Environment.
+.env
+
 # Dev files.
 .vscode
 node_modules
+*.json
 
 # Build files.
 app
 *.zip
-
-# Data files.
-*.json
