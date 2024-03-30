@@ -63,7 +63,7 @@ export class Pointsbet extends Scraper {
     }
 
     protected parseMarketName(name: string): string | false {
-        if (name.startsWith("Match Result")) {
+        if (name.startsWith("Match Result") && !name.includes("After")) {
             return "HeadToHead";
         } else if (name.startsWith("Pick Your Own Line")) {
             return "Lines";
