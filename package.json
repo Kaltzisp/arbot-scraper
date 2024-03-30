@@ -10,7 +10,8 @@
     },
     "scripts": {
         "build": "rm -rf app/* && npx tsc -p tsconfig.json",
-        "zip": "7z a -tzip -r -w arbscraper.zip ./package.json ./app/* ./node_modules"
+        "cpfs": "cp ./package.json ./package-lock.json ./app && npm install --prefix=./app --omit=dev && rm ./app/node_modules/arbot-scraper && rm -r ./app/Models",
+        "zip": "npm run build && npm run cpfs && 7z a -tzip arbscraper.zip ./app/* && mv arbscraper.zip ./app/arbscraper.zip"
     },
     "devDependencies": {
         "@types/node": "latest",
