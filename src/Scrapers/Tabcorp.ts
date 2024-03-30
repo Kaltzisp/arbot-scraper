@@ -9,6 +9,9 @@ export class Tabcorp extends Scraper {
         },
         AussieRules: {
             AFL: "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL?jurisdiction=NSW"
+        },
+        Basketball: {
+            NBA: "https://api.beta.tab.com.au/v1/tab-info-service/sports/Basketball/competitions/NBA?jurisdiction=NSW"
         }
     };
 

@@ -9,6 +9,9 @@ export class Unibet extends Scraper {
         },
         AussieRules: {
             AFL: "https://www.unibet.com.au/sportsbook-feeds/views/filter/australian_rules/afl/all/matches?ncid=1711711009"
+        },
+        Basketball: {
+            NBA: "https://www.unibet.com.au/sportsbook-feeds/views/filter/basketball/nba/all/matches?ncid=1711759504"
         }
     };
 

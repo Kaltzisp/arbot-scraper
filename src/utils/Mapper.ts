@@ -38,6 +38,38 @@ const MAPPINGS: Mappings = {
         "St George Illawarra Dragons": ["St George Illawarra Dragons", "StGI"],
         "Sydney Roosters": ["Sydney Roosters", "Syd Roosters"],
         "Wests Tigers": ["Wests Tigers", "WTig"],
+    },
+    NBA: {
+        "Atlanta Hawks": ["Atlanta Hawks"],
+        "Boston Celtics": ["Boston Celtics"],
+        "Brooklyn Nets": ["Brooklyn Nets"],
+        "Charlotte Hornets": ["Charlotte Hornets"],
+        "Chicago Bulls": ["Chicago Bulls"],
+        "Cleveland Cavaliers": ["Cleveland Cavaliers"],
+        "Dallas Mavericks": ["Dallas Mavericks"],
+        "Denver Nuggets": ["Denver Nuggets"],
+        "Detroit Pistons": ["Detroit Pistons"],
+        "Golden State Warriors": ["Golden State Warriors"],
+        "Houston Rockets": ["Houston Rockets"],
+        "Indiana Pacers": ["Indiana Pacers"],
+        "Los Angeles Clippers": ["Los Angeles Clippers", "LA Clippers"],
+        "Los Angeles Lakers": ["Los Angeles Lakers", "LA Lakers"],
+        "Memphis Grizzlies": ["Memphis Grizzlies"],
+        "Miami Heat": ["Miami Heat"],
+        "Milwaukee Bucks": ["Milwaukee Bucks"],
+        "Minnesota Timberwolves": ["Minnesota Timberwolves"],
+        "New Orleans Pelicans": ["New Orleans Pelicans"],
+        "New York Knicks": ["New York Knicks"],
+        "Oklahoma City Thunder": ["Oklahoma City Thunder"],
+        "Orlando Magic": ["Orlando Magic"],
+        "Philadelphia 76ers": ["Philadelphia 76ers"],
+        "Phoenix Suns": ["Phoenix Suns"],
+        "Portland Trail Blazers": ["Portland Trail Blazers"],
+        "Sacramento Kings": ["Sacramento Kings"],
+        "San Antonio Spurs": ["San Antonio Spurs"],
+        "Toronto Raptors": ["Toronto Raptors"],
+        "Utah Jazz": ["Utah Jazz"],
+        "Washington Wizards": ["Washington Wizards"]
     }
 };
 
@@ -86,26 +118,3 @@ interface Mappings {
         [runnerName: string]: string[];
     };
 }
-
-
-// const MAPPINGS: Mappings = {
-//     NRL: {
-//         "Brisbane Broncos": ["Brisbane", "Broncos", "Brisbane Broncos", "Bris"],
-//         "Canberra Raiders": ["Canberra", "Raiders", "Canberra Raiders", "Canb"],
-//         "Canterbury Bankstown Bulldogs": ["Canterbury-Bankstown", "Bulldogs", "Canterbury Bankstown Bulldogs", "Canterbury Bulldogs", "Bdgs"],
-//         "Cronulla Sharks": ["Cronulla-Sutherland", "Sharks", "Cronulla-Sutherland Sharks", "Cronulla Sharks", "Cronulla", "Cron"],
-//         "Gold Coast Titans": ["Gold Coast", "Titans", "Gold Coast Titans", "GCst"],
-//         "Manly Warringah Sea Eagles": ["Manly-Warringah", "Sea Eagles", "Manly Warringah Sea Eagles", "Manly Sea Eagles", "Manly", "Man"],
-//         "Melbourne Storm": ["Melbourne", "Storm", "Melbourne Storm"],
-//         "Newcastle Knights": ["Newcastle", "Knights", "Newcastle Knights", "Newc"],
-//         "New Zealand Warriors": ["New Zealand", "Warriors", "New Zealand Warriors", "Warr"],
-//         "North Queensland Cowboys": ["North Queensland", "Cowboys", "North Queensland Cowboys", "Nth Queensland Cowboys", "Nth Qld", "NQld"],
-//         "Parramatta Eels": ["Parramatta", "Eels", "Parramatta Eels", "Parr"],
-//         "Penrith Panthers": ["Penrith", "Panthers", "Penrith Panthers", "Penr"],
-//         "Redcliffe Dolphins": ["Redcliffe", "Dolphins", "Redcliffe Dolphins", "Dolp", "The Dolphins"],
-//         "South Sydney Rabbitohs": ["South Sydney", "Rabbitohs", "South Sydney Rabbitohs", "Souths", "Sths"],
-//         "St George Illawarra Dragons": ["St George Illawarra", "Dragons", "St George Illawarra Dragons", "St George Ill", "StGI"],
-//         "Sydney Roosters": ["Sydney", "Roosters", "Sydney Roosters", "Syd Roosters", "SydR"],
-//         "Wests Tigers": ["Wests", "Tigers", "Wests Tigers", "WTig"],
-//     }
-// };

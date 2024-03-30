@@ -9,6 +9,9 @@ export class Ladbrokes extends Scraper {
         },
         AussieRules: {
             AFL: "https://api.ladbrokes.com.au/v2/sport/event-request?category_ids=%5B%2223d497e6-8aab-4309-905b-9421f42c9bc5%22%5D&competition_id=ccff2e9a-5347-41aa-902a-bb6b1886d817&include_any_team_vs_any_team_events=true"
+        },
+        Basketball: {
+            NBA: "https://api.ladbrokes.com.au/v2/sport/event-request?category_ids=%5B%223c34d075-dc14-436d-bfc4-9272a49c2b39%22%5D&competition_id=2d20a25b-6b96-4651-a523-442834136e2d&include_any_team_vs_any_team_events=true"
         }
     };
 

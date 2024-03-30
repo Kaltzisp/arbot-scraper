@@ -8,7 +8,10 @@ export class Palmerbet extends Scraper {
             NRL: "https://fixture.palmerbet.online/fixtures/sports/9587e5c4-8dd8-403d-b516-6dd69d2f42ef/matches"
         },
         AussieRules: {
-            AFL: "https://fixture.palmerbet.online/fixtures/sports/fe2b1527-89d2-417b-818a-382ed1496ded/matches"
+            AFL: "https://fixture.palmerbet.online/fixtures/sports/2178a143-5780-4d12-a471-100daaa76852/matches"
+        },
+        Basketball: {
+            NBA: "https://fixture.palmerbet.online/fixtures/sports/1c2eeb3a-6bab-4ac2-b434-165cc350180f/matches"
         }
     };
 

@@ -9,6 +9,9 @@ export class Sportsbet extends Scraper {
         },
         AussieRules: {
             AFL: "https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Class/50/Events?displayType=coupon&detailsLevel=O"
+        },
+        Basketball: {
+            NBA: "https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Class/16/Events?displayType=coupon&detailsLevel=O"
         }
     };
 

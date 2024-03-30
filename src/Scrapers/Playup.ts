@@ -9,6 +9,9 @@ export class Playup extends Scraper {
         },
         AussieRules: {
             AFL: "https://wagering-api.playup.io/v1/sport_events/?filter[competition_id]=136"
+        },
+        Basketball: {
+            NBA: "https://wagering-api.playup.io/v1/sport_events/?filter[competition_id]=124"
         }
     };
 
@@ -41,7 +44,8 @@ export class Playup extends Scraper {
     protected async scrapeMarkets(compId: string, url: string): Promise<Offers> {
         const marketEndpoints = {
             NRL: [133, 162, 168],
-            AFL: [206, 222, 223]
+            AFL: [206, 222, 223],
+            NBA: [202, 210, 211]
         };
         const promises: Promise<void>[] = [];
         const offers: Offers = {};
@@ -74,7 +78,7 @@ export class Playup extends Scraper {
                     }
                 }
             }).catch(() => {
-                console.error(`Market not found for ${compId} at ${url + endpoint}`);
+                console.error(`Market not found for ${compId} at ${url}-${endpoint}`);
             }));
         }
         await Promise.all(promises);
