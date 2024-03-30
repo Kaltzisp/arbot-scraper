@@ -1,8 +1,8 @@
 // Imports.
-import type { MarketData } from "./utils/Scraper.js";
-import { writeFileSync } from "fs";
+import type { MarketData, Scraper } from "./core/Scraper.js";
+import { WebScraper } from "./core/WebScraper.js";
 
-// Scrapers.
+// Scraper imports.
 import { Ladbrokes } from "./Scrapers/Ladbrokes.js";
 import { Palmerbet } from "./Scrapers/Palmerbet.js";
 import { Playup } from "./Scrapers/Playup.js";
@@ -11,51 +11,20 @@ import { Sportsbet } from "./Scrapers/Sportsbet.js";
 import { Tabcorp } from "./Scrapers/Tabcorp.js";
 import { Unibet } from "./Scrapers/Unibet.js";
 
-
-/** Gets the market data from the bookie APIs. */
-async function scrapeAll(): Promise<MarketData> {
-
-    // Initialising market data.
-    const marketData: MarketData = {
-        meta: {
-            scrapedAt: Date.now()
-        },
-        data: []
-    };
-
-    // Collecting scrapers.
-    const scrapers = [
-        new Ladbrokes(),
-        new Palmerbet(),
-        new Playup(),
-        new Pointsbet(),
-        new Sportsbet(),
-        new Tabcorp(),
-        new Unibet()
-    ];
-
-    // Scraping market data.
-    const promises: Promise<void>[] = [];
-    for (const scraper of scrapers) {
-        promises.push(scraper.scrapeBookie().then((bookieData) => {
-            marketData.data.push(bookieData);
-        }).catch((e: unknown) => {
-            console.log(e);
-        }));
-    }
-
-    await Promise.all(promises);
-    return marketData;
-
-}
+const Scrapers: Scraper[] = [
+    new Ladbrokes(),
+    new Palmerbet(),
+    new Playup(),
+    new Pointsbet(),
+    new Sportsbet(),
+    new Tabcorp(),
+    new Unibet()
+];
 
 // Running webscraper on AWS Lambda.
 export async function handler(event: unknown): Promise<MarketData> {
     console.log(event);
-    const marketData = await scrapeAll();
+    const webscraper = new WebScraper(Scrapers);
+    const marketData = await webscraper.getMarketData();
     return marketData;
 }
-
-// Running test instance.
-const data = await scrapeAll();
-writeFileSync("./marketData.json", JSON.stringify(data));
