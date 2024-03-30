@@ -10,7 +10,7 @@
     },
     "scripts": {
         "build": "rm -rf app/* && npx tsc -p tsconfig.json",
-        "zip": "7z a -tzip -r -w webscraper.zip ./package.json ./app/* ./node_modules"
+        "zip": "7z a -tzip -r -w arbscraper.zip ./package.json ./app/* ./node_modules"
     },
     "devDependencies": {
         "@types/node": "latest",
@@ -18,5 +18,9 @@
         "@typescript-eslint/parser": "latest",
         "eslint": "latest",
         "typescript": "latest"
+    },
+    "dependencies": {
+        "@aws-sdk/client-s3": "latest",
+        "dotenv": "latest"
     }
 }
