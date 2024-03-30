@@ -18,10 +18,7 @@ export class Sportsbet extends Scraper {
 
     protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url) as MatchesResponse[];
-        const comp: CompData = {
-            compId,
-            matches: []
-        };
+        const comp: CompData = {}
         const promises: Promise<void>[] = [];
         for (const event of data[0].events) {
             const match = new Match(
@@ -32,10 +29,10 @@ export class Sportsbet extends Scraper {
             );
             promises.push(this.scrapeMarkets(compId, `https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/${event.id}/SportCard`).then((matchOffers) => {
                 match.offers = matchOffers;
-                comp.matches.push(match);
+                comp[match.id] = match;
             }).catch((e: unknown) => {
                 console.error(e);
-                comp.matches.push(match);
+                comp[match.id] = match;
             }));
         }
         await Promise.all(promises);
@@ -55,13 +52,11 @@ export class Sportsbet extends Scraper {
                     const marketName = this.parseMarketName(market.name);
                     if (marketName) {
                         if (!offers[marketName]) {
-                            offers[marketName] = [];
+                            offers[marketName] = {};
                         }
                         for (const selection of market.selections) {
-                            offers[marketName]!.push({
-                                runnerName: Mapper.mapRunner(compId, selection.name),
-                                runnerOdds: selection.price.winPrice
-                            });
+                            const runnerName = Mapper.mapRunner(compId, selection.name);
+                            offers[marketName]![runnerName] = selection.price.winPrice;
                         }
                     }
                 }

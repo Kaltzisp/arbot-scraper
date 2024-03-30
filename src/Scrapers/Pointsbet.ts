@@ -18,10 +18,7 @@ export class Pointsbet extends Scraper {
 
     protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url) as MatchesResponse;
-        const comp: CompData = {
-            compId,
-            matches: []
-        };
+        const comp: CompData = {}
         const promises: Promise<void>[] = [];
         for (const event of data.events) {
             const match = new Match(
@@ -32,10 +29,10 @@ export class Pointsbet extends Scraper {
             );
             promises.push(this.scrapeMarkets(compId, `https://api.au.pointsbet.com/api/mes/v3/events/${event.key}`).then((matchOffers) => {
                 match.offers = matchOffers;
-                comp.matches.push(match);
+                comp[match.id] = match;
             }).catch((e: unknown) => {
                 console.error(e);
-                comp.matches.push(match);
+                comp[match.id] = match;
             }));
         }
         await Promise.all(promises);
@@ -49,13 +46,11 @@ export class Pointsbet extends Scraper {
             const marketName = this.parseMarketName(market.name);
             if (marketName) {
                 if (!offers[marketName]) {
-                    offers[marketName] = [];
+                    offers[marketName] = {};
                 }
                 for (const runner of market.outcomes) {
-                    offers[marketName]!.push({
-                        runnerName: Mapper.mapRunner(compId, runner.name),
-                        runnerOdds: runner.price
-                    });
+                    const runnerName = Mapper.mapRunner(compId, runner.name);
+                    offers[marketName]![runnerName] = runner.price;
                 }
             }
 

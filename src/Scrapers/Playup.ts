@@ -18,10 +18,7 @@ export class Playup extends Scraper {
 
     protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url) as MatchesResponse;
-        const comp: CompData = {
-            compId,
-            matches: []
-        };
+        const comp: CompData = {}
         const promises: Promise<void>[] = [];
         for (const event of data.data) {
             const match = new Match(
@@ -32,10 +29,10 @@ export class Playup extends Scraper {
             );
             promises.push(this.scrapeMarkets(compId, `https://wagering-api.playup.io/v1/event_market_groups/${event.id}`).then((matchOffers) => {
                 match.offers = matchOffers;
-                comp.matches.push(match);
+                comp[match.id] = match;
             }).catch((e: unknown) => {
                 console.error(e);
-                comp.matches.push(match);
+                comp[match.id] = match;
             }));
         }
         await Promise.all(promises);
@@ -58,22 +55,17 @@ export class Playup extends Scraper {
                         const marketName = this.parseMarketName(entry.attributes.name);
                         if (marketName) {
                             if (!offers[marketName]) {
-                                offers[marketName] = [];
+                                offers[marketName] = {};
                             }
                             for (const runnerId of entry.relationships.selections.data) {
                                 const runner = data.included.find(element => element.id === runnerId.id)!;
+                                let runnerName = "";
                                 if (runner.attributes.line) {
-                                    offers[marketName]!.push({
-                                        runnerName: Mapper.mapRunner(compId, `${runner.attributes.name.replace("Total Score ", "")} ${runner.attributes.line}`),
-                                        runnerOdds: runner.attributes.d_price
-                                    })
+                                    runnerName = Mapper.mapRunner(compId, `${runner.attributes.name.replace("Total Score ", "")} ${runner.attributes.line}`);
                                 } else {
-                                    offers[marketName]!.push({
-                                        runnerName: Mapper.mapRunner(compId, runner.attributes.name),
-                                        runnerOdds: runner.attributes.d_price
-                                    })
-
+                                    runnerName = Mapper.mapRunner(compId, runner.attributes.name)
                                 }
+                                offers[marketName]![runnerName] = runner.attributes.d_price;
                             }
                         }
                     }

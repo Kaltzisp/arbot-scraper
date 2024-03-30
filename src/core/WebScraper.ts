@@ -11,7 +11,7 @@ export class WebScraper {
             meta: {
                 scrapedAt: Date.now()
             },
-            data: []
+            data: {}
         };
     }
 
@@ -19,7 +19,7 @@ export class WebScraper {
         const marketRequests: Promise<void>[] = [];
         for (const scraper of this.scrapers) {
             marketRequests.push(scraper.scrapeBookie().then((bookieData) => {
-                this.marketData.data.push(bookieData);
+                this.marketData.data[scraper.constructor.name] = bookieData;
             }).catch((e: unknown) => {
                 console.error(e);
             }));

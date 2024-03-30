@@ -18,10 +18,7 @@ export class Tabcorp extends Scraper {
 
     protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url) as MatchesResponse;
-        const comp: CompData = {
-            compId,
-            matches: []
-        };
+        const comp: CompData = {}
         const promises: Promise<void>[] = [];
         for (const event of data.matches) {
             const match = new Match(
@@ -32,10 +29,10 @@ export class Tabcorp extends Scraper {
             );
             promises.push(this.scrapeMarkets(compId, event._links.self).then((matchOffers) => {
                 match.offers = matchOffers;
-                comp.matches.push(match);
+                comp[match.id] = match;
             }).catch((e: unknown) => {
                 console.error(e);
-                comp.matches.push(match);
+                comp[match.id] = match;
             }));
         }
         await Promise.all(promises);
@@ -49,13 +46,11 @@ export class Tabcorp extends Scraper {
             const marketName = this.parseMarketName(market.betOption);
             if (marketName) {
                 if (!offers[marketName]) {
-                    offers[marketName] = [];
+                    offers[marketName] = {};
                 }
                 for (const runner of market.propositions) {
-                    offers[marketName]!.push({
-                        runnerName: Mapper.mapRunner(compId, runner.name),
-                        runnerOdds: runner.returnWin
-                    });
+                    const runnerName = Mapper.mapRunner(compId, runner.name);
+                    offers[marketName]![runnerName] = runner.returnWin;
                 }
             }
 

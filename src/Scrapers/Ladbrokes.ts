@@ -18,10 +18,7 @@ export class Ladbrokes extends Scraper {
 
     protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url) as MatchesResponse;
-        const comp: CompData = {
-            compId,
-            matches: []
-        };
+        const comp: CompData = {};
         const promises: Promise<void>[] = [];
         for (const eventId in data.events) {
             const event = data.events[eventId];
@@ -35,10 +32,10 @@ export class Ladbrokes extends Scraper {
                 );
                 promises.push(this.scrapeMarkets(compId, `https://api.ladbrokes.com.au/v2/sport/event-card?id=${event.id}`).then((matchOffers) => {
                     match.offers = matchOffers;
-                    comp.matches.push(match);
+                    comp[match.id] = match;
                 }).catch((e: unknown) => {
                     console.error(e);
-                    comp.matches.push(match);
+                    comp[match.id] = match;
                 }));
             }
         }
@@ -60,13 +57,11 @@ export class Ladbrokes extends Scraper {
             const marketName = this.parseMarketName(data.markets[runner.market_id].name);
             if (marketName) {
                 if (!offers[marketName]) {
-                    offers[marketName] = [];
+                    offers[marketName] = {};
                 }
                 const odds = data.prices[Object.keys(data.prices).find(id => id.startsWith(runnerId))!].odds;
-                offers[marketName]!.push({
-                    runnerName: Mapper.mapRunner(compId, runner.name),
-                    runnerOdds: 1 + odds.numerator / odds.denominator
-                });
+                const runnerName = Mapper.mapRunner(compId, runner.name);
+                offers[marketName]![runnerName] = 1 + odds.numerator / odds.denominator;
             }
         }
         return offers;

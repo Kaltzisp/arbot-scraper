@@ -2,7 +2,7 @@ import type { Match, Offers } from "./Match.js";
 
 export abstract class Scraper {
 
-    protected readonly data: BookieData;
+    protected readonly data: BookieData = {};
     protected readonly promisedData: Promise<void>[] = [];
 
     protected abstract bookieEndpoints: {
@@ -11,14 +11,7 @@ export abstract class Scraper {
         };
     };
 
-    public constructor() {
-        this.data = {
-            bookieId: this.constructor.name,
-            sports: {}
-        };
-    }
-
-    /** Scrapes a bookie url and returns the resulting object.
+    /** Retrieves data from a bookie url and returns the resulting object.
      * 
      * @param url the url to the bookie API.
      * @param options an optional property containing request headers or other data.
@@ -38,11 +31,11 @@ export abstract class Scraper {
     /** Scrapes a bookie and returns the resulting BookieData object. */
     public async scrapeBookie(): Promise<BookieData> {
         for (const sportId in this.bookieEndpoints) {
-            this.data.sports[sportId] = [];
+            this.data[sportId] = {};
             const comps = this.bookieEndpoints[sportId];
             for (const compId in comps) {
                 this.promisedData.push(this.scrapeComp(sportId, compId, comps[compId]).then((comp) => {
-                    this.data.sports[sportId].push(comp);
+                    this.data[sportId][compId] = comp;
                 }).catch((e: unknown) => {
                     console.error(e);
                 }));
@@ -62,17 +55,17 @@ export interface MarketData {
     meta: {
         scrapedAt: number;
     };
-    data: BookieData[];
+    data: {
+        [bookieId: string]: BookieData;
+    }
 }
 
 export interface BookieData {
-    bookieId: string;
-    sports: {
-        [sportId: string]: CompData[];
-    };
+    [sportId: string]: {
+        [compId: string]: CompData
+    }
 }
 
 export interface CompData {
-    compId: string;
-    matches: Match[];
+    [matchId: string]: Match;
 }
