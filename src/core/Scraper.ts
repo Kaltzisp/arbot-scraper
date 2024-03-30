@@ -1,4 +1,4 @@
-import { Mapper } from "./Mapper.js";
+import type { Match, Offers } from "./Match.js";
 
 export abstract class Scraper {
 
@@ -18,6 +18,12 @@ export abstract class Scraper {
         };
     }
 
+    /** Scrapes a bookie url and returns the resulting object.
+     * 
+     * @param url the url to the bookie API.
+     * @param options an optional property containing request headers or other data.
+     * @returns a promise of the JSON parsed body recieved.
+     */
     protected static async getDataFromUrl(url: string, options?: RequestInit): Promise<unknown> {
         const response = await fetch(url, options ?? {}).catch((e: unknown) => {
             console.error(e);
@@ -29,6 +35,7 @@ export abstract class Scraper {
         return data;
     }
 
+    /** Scrapes a bookie and returns the resulting BookieData object. */
     public async scrapeBookie(): Promise<BookieData> {
         for (const sportId in this.bookieEndpoints) {
             this.data.sports[sportId] = [];
@@ -51,21 +58,6 @@ export abstract class Scraper {
 
 }
 
-export class Match {
-
-    public readonly matchId: string;
-    public readonly homeTeam: string;
-    public readonly awayTeam: string;
-    public offers: Offers = {};
-
-    public constructor(compId: string, homeTeam: string, awayTeam: string, public startTime: number) {
-        this.homeTeam = Mapper.mapRunner(compId, homeTeam);
-        this.awayTeam = Mapper.mapRunner(compId, awayTeam);
-        this.matchId = `${this.homeTeam} vs ${this.awayTeam}`;
-    }
-
-}
-
 export interface MarketData {
     meta: {
         scrapedAt: number;
@@ -83,11 +75,4 @@ export interface BookieData {
 export interface CompData {
     compId: string;
     matches: Match[];
-}
-
-export interface Offers {
-    [marketName: string]: {
-        runnerName: string;
-        runnerOdds: number;
-    }[] | undefined;
 }

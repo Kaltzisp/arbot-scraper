@@ -16,7 +16,7 @@ class RunnerMapper {
         }
     }
 
-    /** Gets a mapped runner name from a bookie runner name */
+    /** Gets a mapped runner name from a bookie runner name. */
     public mapRunner(compId: string, alias: string): string {
         const id = this.stripAlias(alias);
         if (this.runnerMap[compId]) {

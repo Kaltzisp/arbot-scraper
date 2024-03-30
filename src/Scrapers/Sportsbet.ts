@@ -1,5 +1,6 @@
-import { type CompData, Match, type Offers, Scraper, } from "../utils/Scraper.js";
-import { Mapper } from "../utils/Mapper.js";
+import { type CompData, Scraper, } from "../core/Scraper.js";
+import { Match, type Offers } from "../core/Match.js";
+import { Mapper } from "../mapper/Mapper.js";
 
 export class Sportsbet extends Scraper {
 
