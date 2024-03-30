@@ -28,7 +28,7 @@ export class Sportsbet extends Scraper {
                 compId,
                 event.participant1,
                 event.participant2,
-                event.startTime
+                event.startTime * 1000
             );
             promises.push(this.scrapeMarkets(compId, `https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Events/${event.id}/SportCard`).then((matchOffers) => {
                 match.offers = matchOffers;
