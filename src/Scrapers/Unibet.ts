@@ -1,5 +1,5 @@
 import { type CompData, Match, type Offers, Scraper, } from "../utils/Scraper.js";
-import { mapRunner } from "../utils/Mapper.js";
+import { Mapper } from "../utils/Mapper.js";
 
 export class Unibet extends Scraper {
 
@@ -53,7 +53,7 @@ export class Unibet extends Scraper {
                 for (const runner of offer.outcomes) {
                     const runnerName = runner.line ? `${runner.label} ${runner.line / 1000}` : runner.participant!;
                     offers[marketName]!.push({
-                        runnerName: mapRunner(compId, runnerName),
+                        runnerName: Mapper.mapRunner(compId, runnerName),
                         runnerOdds: runner.odds / 1000
                     });
                 }

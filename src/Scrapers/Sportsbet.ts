@@ -1,5 +1,5 @@
 import { type CompData, Match, type Offers, Scraper, } from "../utils/Scraper.js";
-import { mapRunner } from "../utils/Mapper.js";
+import { Mapper } from "../utils/Mapper.js";
 
 export class Sportsbet extends Scraper {
 
@@ -58,7 +58,7 @@ export class Sportsbet extends Scraper {
                         }
                         for (const selection of market.selections) {
                             offers[marketName]!.push({
-                                runnerName: mapRunner(compId, selection.name),
+                                runnerName: Mapper.mapRunner(compId, selection.name),
                                 runnerOdds: selection.price.winPrice
                             });
                         }

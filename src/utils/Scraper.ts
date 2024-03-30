@@ -1,4 +1,4 @@
-import { mapRunner } from "./Mapper.js";
+import { Mapper } from "./Mapper.js";
 
 export abstract class Scraper {
 
@@ -59,8 +59,8 @@ export class Match {
     public offers: Offers = {};
 
     public constructor(compId: string, homeTeam: string, awayTeam: string, public startTime: number) {
-        this.homeTeam = mapRunner(compId, homeTeam);
-        this.awayTeam = mapRunner(compId, awayTeam);
+        this.homeTeam = Mapper.mapRunner(compId, homeTeam);
+        this.awayTeam = Mapper.mapRunner(compId, awayTeam);
         this.matchId = `${this.homeTeam} vs ${this.awayTeam}`;
     }
 

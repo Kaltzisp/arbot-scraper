@@ -1,5 +1,5 @@
 import { type CompData, Match, type Offers, Scraper, } from "../utils/Scraper.js";
-import { mapRunner } from "../utils/Mapper.js";
+import { Mapper } from "../utils/Mapper.js";
 
 export class Playup extends Scraper {
 
@@ -63,12 +63,12 @@ export class Playup extends Scraper {
                                 const runner = data.included.find(element => element.id === runnerId.id)!;
                                 if (runner.attributes.line) {
                                     offers[marketName]!.push({
-                                        runnerName: mapRunner(compId, `${runner.attributes.name.replace("Total Score ", "")} ${runner.attributes.line}`),
+                                        runnerName: Mapper.mapRunner(compId, `${runner.attributes.name.replace("Total Score ", "")} ${runner.attributes.line}`),
                                         runnerOdds: runner.attributes.d_price
                                     })
                                 } else {
                                     offers[marketName]!.push({
-                                        runnerName: mapRunner(compId, runner.attributes.name),
+                                        runnerName: Mapper.mapRunner(compId, runner.attributes.name),
                                         runnerOdds: runner.attributes.d_price
                                     })
 

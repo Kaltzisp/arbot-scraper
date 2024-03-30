@@ -1,5 +1,5 @@
 import { type CompData, Match, type Offers, Scraper, } from "../utils/Scraper.js";
-import { mapRunner } from "../utils/Mapper.js";
+import { Mapper } from "../utils/Mapper.js";
 
 export class Palmerbet extends Scraper {
 
@@ -58,7 +58,7 @@ export class Palmerbet extends Scraper {
                     for (const runner of market.market.outcomes) {
                         if (runner.status === "Active") {
                             offers[marketName]!.push({
-                                runnerName: mapRunner(compId, runner.title),
+                                runnerName: Mapper.mapRunner(compId, runner.title),
                                 runnerOdds: runner.prices[0].priceSnapshot.current
                             });
                         }
