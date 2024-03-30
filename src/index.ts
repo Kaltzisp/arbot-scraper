@@ -30,7 +30,6 @@ export async function handler(event: { [key: string]: boolean | string }): Promi
     const marketData = await webscraper.getMarketData();
     const bucket = new AWSBucket();
     if (event.test) {
-        writeFileSync("./marketData.json", JSON.stringify(marketData));
         bucket.push("arbot-webscraper-bucket", `test-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData);
     } else {
         bucket.push("arbot-webscraper-bucket", "latest.json", marketData);
@@ -41,9 +40,8 @@ export async function handler(event: { [key: string]: boolean | string }): Promi
 
 // Running webscraper test instance.
 if (process.argv[2] === "TEST") {
-    handler({ test: true }).then((data) => {
-        console.log(data);
-    }).catch((e: unknown) => {
+    const data = await handler({ test: true }).catch((e: unknown) => {
         console.error(e);
     });
+    writeFileSync("./marketData.json", JSON.stringify(data));
 }
