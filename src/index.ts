@@ -1,5 +1,6 @@
 // Imports.
 import type { MarketData, Scraper } from "./core/Scraper.js";
+import { AWSBucket } from "./core/AWSBucket.js";
 import { WebScraper } from "./core/WebScraper.js";
 import { writeFileSync } from "fs";
 
@@ -24,14 +25,25 @@ const Scrapers: Scraper[] = [
 ];
 
 // Running webscraper on AWS Lambda.
-export async function handler(event: unknown): Promise<MarketData> {
-    console.log(event);
+export async function handler(event: { [key: string]: boolean | string }): Promise<MarketData> {
     const webscraper = new WebScraper(Scrapers);
     const marketData = await webscraper.getMarketData();
+    const bucket = new AWSBucket();
+    if (event.test) {
+        writeFileSync("./marketData.json", JSON.stringify(marketData));
+        bucket.push("arbot-webscraper-bucket", `test-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData);
+    } else {
+        bucket.push("arbot-webscraper-bucket", "latest.json", marketData);
+        bucket.push("arbot-webscraper-bucket", `marketData-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData);
+    }
     return marketData;
 }
 
+// Running webscraper test instance.
 if (process.argv[2] === "TEST") {
-    const data = await handler({});
-    writeFileSync("./marketData.json", JSON.stringify(data));
+    handler({ test: true }).then((data) => {
+        console.log(data);
+    }).catch((e: unknown) => {
+        console.error(e);
+    });
 }
