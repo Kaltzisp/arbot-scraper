@@ -17,11 +17,15 @@ class RunnerMapper {
     }
 
     /** Gets a mapped runner name from a bookie runner name. */
-    public mapRunner(compId: string, alias: string): string {
+    public mapRunner(compId: string, runnerName: string): string {
+        const alias = runnerName.replace(/[()]/gu, "");
         const id = this.stripAlias(alias);
+        if (this.staticAliases.includes(id)) {
+            return alias;
+        }
         if (this.runnerMap[compId]) {
             const mappedName = this.runnerMap[compId]!.has(id) ? this.runnerMap[compId]!.get(id) : this.runnerMap[compId]!.get(Array.from(this.runnerMap[compId]!.keys()).find(strippedAlias => strippedAlias.includes(id))!)
-            const line = (/[+-]?[\d.]+$/u).exec(alias.replace(/[()]/gu, ""));
+            const line = (/[+-]?[\d.]+$/u).exec(alias);
             if (mappedName && line) {
                 const modifier = parseFloat(line[0]);
                 return modifier > 0 ? `${mappedName} +${modifier}` : `${mappedName} ${modifier}`;
@@ -29,10 +33,8 @@ class RunnerMapper {
                 return mappedName;
             }
         }
-        if (!this.staticAliases.includes(id)) {
-            console.error(`Alias not mapped: ${id}`);
-        }
-        return alias.replace(/[()]/gu, "");
+        console.error(`Alias not found: ${alias}`);
+        return alias;
     }
 
     /** Strips an alias to a lowercase string. */
