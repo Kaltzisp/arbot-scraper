@@ -29,7 +29,7 @@ class RunnerMapper {
                 return mappedName;
             }
         }
-        if (this.staticAliases.includes(id)) {
+        if (!this.staticAliases.includes(id)) {
             console.error(`Alias not mapped: ${id}`);
         }
         return alias.replace(/[()]/gu, "");
