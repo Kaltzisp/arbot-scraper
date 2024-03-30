@@ -30,11 +30,11 @@ export async function handler(event: { [key: string]: boolean | string }): Promi
     const marketData = await webscraper.getMarketData();
     const bucket = new AWSBucket();
     if (event.test) {
-        bucket.push("arbot-webscraper-bucket", `test-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData);
-    } else {
-        bucket.push("arbot-webscraper-bucket", "latest.json", marketData);
-        bucket.push("arbot-webscraper-bucket", `marketData-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData);
+        await bucket.push("arbot-webscraper-bucket", `test-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData).catch((e: unknown) => console.log(e));
+        return marketData;
     }
+    await bucket.push("arbot-webscraper-bucket", "latest.json", marketData).catch((e: unknown) => console.log(e));
+    await bucket.push("arbot-webscraper-bucket", `marketData-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData).catch((e: unknown) => console.log(e));
     return marketData;
 }
 

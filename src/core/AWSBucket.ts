@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand, type PutObjectCommandOutput, S3Client } from "@aws-sdk/client-s3";
 import { configDotenv } from "dotenv";
 
 export class AWSBucket {
@@ -10,12 +10,13 @@ export class AWSBucket {
         this.client = new S3Client({ region: "ap-southeast-4", });
     }
 
-    public push(bucketName: string, fileName: string, data: object): void {
-        this.client.send(new PutObjectCommand({
+    public async push(bucketName: string, fileName: string, data: object): Promise<PutObjectCommandOutput> {
+        const response = await this.client.send(new PutObjectCommand({
             Bucket: bucketName,
             Key: fileName,
             Body: JSON.stringify(data)
-        })).catch((e: unknown) => console.error(e));
+        }));
+        return response;
     }
 
     public dateTime(ms: number): string {
