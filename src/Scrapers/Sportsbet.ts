@@ -43,7 +43,7 @@ export class Sportsbet extends Scraper {
         const data = await Scraper.getDataFromUrl(url) as MatchMarketsResponse;
         const offers: Offers = {};
         const marketRequests = [];
-        const selectedMarkets = ["Top Markets", "Handicap Markets", "Total Points Markets"];
+        const selectedMarkets = ["Top Markets", "Handicap Markets", "Total Markets", "Total Points Markets"];
         const marketGroups = data.marketGrouping.filter(market => selectedMarkets.includes(market.name));
         for (const marketType of marketGroups) {
             await new Promise((resolve) => { setTimeout(resolve, 500); });
@@ -70,11 +70,11 @@ export class Sportsbet extends Scraper {
     }
 
     protected parseMarketName(name: string): string | false {
-        if (name === "Head to Head") {
+        if (name === "Head to Head" || name === "Match Betting") {
             return "HeadToHead";
         } else if (name === "Pick Your Line" || name === "Pick Your Own Line") {
             return "Lines";
-        } else if (name === "Pick Your Own Total" || name === "Alternative Total Match Points") {
+        } else if (name === "Pick Your Own Total" || name === "Alternative Total Match Points" || name === "Alternate Total Points") {
             return "Totals";
         }
         return false;
