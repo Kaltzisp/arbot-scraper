@@ -30,13 +30,16 @@ export class Ladbrokes extends Scraper {
                     teams[1],
                     Date.parse(event.actual_start)
                 );
-                promises.push(this.scrapeMarkets(compId, `https://api.ladbrokes.com.au/v2/sport/event-card?id=${event.id}`).then((matchOffers) => {
-                    match.offers = matchOffers;
-                    comp[match.id] = match;
-                }).catch((e: unknown) => {
-                    console.error(e);
-                    comp[match.id] = match;
-                }));
+                // Checking whether match has already occurred.
+                if ((Date.now() - match.startTime) / (1000 * 60 * 60) < 4) {
+                    promises.push(this.scrapeMarkets(compId, `https://api.ladbrokes.com.au/v2/sport/event-card?id=${event.id}`).then((matchOffers) => {
+                        match.offers = matchOffers;
+                        comp[match.id] = match;
+                    }).catch((e: unknown) => {
+                        console.error(e);
+                        comp[match.id] = match;
+                    }));
+                }
             }
         }
         await Promise.all(promises);
