@@ -1,7 +1,7 @@
 // Imports.
 import type { MarketData, Scraper } from "./core/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
-import { Arber } from "./Models/Arbitrage.js";
+import { Arber } from "./Models/Arber.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
 import { WebScraper } from "./core/WebScraper.js";
 import { writeFileSync } from "fs";

@@ -1,9 +1,9 @@
 import { findHeadToHeadArbs, findLineArbs, findTotalsArbs } from "./findArbs.js";
+import { readFileSync, writeFileSync } from "fs";
 import { AWSBucket } from "../core/AWSBucket.js";
 import { BetEvent } from "./utils/BetEvent.js";
 import type { MarketData } from "../core/Scraper.js";
 import type { MatchedBet } from "./utils/MatchedBet.js";
-import { readFileSync } from "fs";
 
 export class Arber {
 
@@ -19,6 +19,7 @@ export class Arber {
             this.marketData = JSON.parse(readFileSync(file, "utf8")) as MarketData;
         } else {
             this.marketData = await (new AWSBucket()).getLatest();
+            writeFileSync("./marketData.json", JSON.stringify(this.marketData));
         }
         // Reconstructing matches array.
         for (const bookieId in this.marketData.data) {
