@@ -1,7 +1,6 @@
 // Imports.
 import type { MarketData, Scraper } from "./WebScraper/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
-import { Arber } from "./Models/Arber.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
 import { ScraperFactory } from "./WebScraper/ScraperFactory.js";
 import { writeFileSync } from "fs";
@@ -43,7 +42,8 @@ if (process.argv[2] === "TEST_SCRAPER") {
     const data = await handler({ test: true });
     writeFileSync("./marketData.json", JSON.stringify(data));
 } else if (process.argv[2] === "TEST_MODELS") {
-    const arbot = new Arber();
+    const Arber = await import("./Models/Arber.js");
+    const arbot = new Arber.Arber();
     await arbot.loadLatest();
     arbot.filter({
         minEv: -1
