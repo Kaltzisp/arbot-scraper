@@ -14,7 +14,7 @@ export class AWSBucket {
     public async push(marketData: MarketData): Promise<PutObjectCommandOutput> {
         const response = await this.client.send(new PutObjectCommand({
             Bucket: this.bucketName,
-            Key: `marketData-${this.dateTime(marketData.meta.scrapedAt)}`,
+            Key: `marketData-${this.dateTime(marketData.meta.scrapedAt)}.json`,
             Body: JSON.stringify(marketData)
         }));
         return response;
