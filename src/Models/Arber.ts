@@ -27,9 +27,13 @@ export class Arber {
                 for (const compId in this.marketData.data[bookieId][sportId]) {
                     for (const matchId in this.marketData.data[bookieId][sportId][compId]) {
                         if (!this.matches[matchId]) {
-                            this.matches[matchId] = new BetEvent(this.marketData.data[bookieId][sportId][compId][matchId]);
+                            if (!this.matches[matchId.split(" vs ").reverse().join(" vs ")]) {
+                                this.matches[matchId] = new BetEvent(this.marketData.data[bookieId][sportId][compId][matchId]);
+                                this.matches[matchId]!.addMarketsFrom(bookieId, this.marketData.data[bookieId][sportId][compId][matchId]);
+                            } else {
+                                this.matches[matchId.split(" vs ").reverse().join(" vs ")]!.addMarketsFrom(bookieId, this.marketData.data[bookieId][sportId][compId][matchId]);
+                            }
                         }
-                        this.matches[matchId]!.addMarketsFrom(bookieId, this.marketData.data[bookieId][sportId][compId][matchId]);
                     }
                 }
             }
