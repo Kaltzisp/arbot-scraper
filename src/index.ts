@@ -2,7 +2,7 @@
 import type { MarketData, Scraper } from "./WebScraper/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
-import { ScraperFactory } from "./WebScraper/ScraperFactory.js";
+import { Webscraper } from "./WebScraper/Webscraper.js";
 import { writeFileSync } from "fs";
 
 // Scraper imports.
@@ -27,7 +27,7 @@ const Scrapers: Scraper[] = [
 
 // Running webscraper on AWS Lambda.
 export async function handler(event: { [key: string]: boolean | string }): Promise<MarketData | PutObjectCommandOutput> {
-    const webscraper = new ScraperFactory(Scrapers);
+    const webscraper = new Webscraper(Scrapers);
     const marketData = await webscraper.getMarketData();
     if (event.test) {
         return marketData;
@@ -46,6 +46,6 @@ if (process.argv[2] === "TEST_SCRAPER") {
     const arbot = new Arber.Arber();
     await arbot.loadLatest();
     arbot.filter({
-        minEv: -1
+        minEv: 0
     });
 }

@@ -1,6 +1,6 @@
 import type { MarketData, Scraper } from "./Scraper.js";
 
-export class ScraperFactory {
+export class Webscraper {
 
     public scrapers: Scraper[];
     public marketData: MarketData;
