@@ -1,8 +1,8 @@
-import { findHeadToHeadArbs, findLineArbs, findTotalsArbs } from "./findArbs.js";
+import { findHeadToHeadArbs, findLineArbs, findTotalsArbs } from "./utils/findArbs.js";
 import { readFileSync, writeFileSync } from "fs";
 import { AWSBucket } from "../core/AWSBucket.js";
 import { BetEvent } from "./utils/BetEvent.js";
-import type { MarketData } from "../core/Scraper.js";
+import type { MarketData } from "../WebScraper/Scraper.js";
 import type { MatchedBet } from "./utils/MatchedBet.js";
 
 export class Arber {

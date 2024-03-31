@@ -1,4 +1,4 @@
-import { Mapper } from "../mapper/Mapper.js";
+import { Mapper } from "./Mapper.js";
 
 export class Match {
     public readonly id: string;

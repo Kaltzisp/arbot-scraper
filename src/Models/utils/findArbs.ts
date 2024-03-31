@@ -1,6 +1,6 @@
-import type { BetEvent } from "./utils/BetEvent.js";
-import { MatchedBet } from "./utils/MatchedBet.js";
-import type { Runner } from "./utils/Runner.js";
+import type { BetEvent } from "./BetEvent.js";
+import { MatchedBet } from "./MatchedBet.js";
+import type { Runner } from "./Runner.js";
 
 export function findHeadToHeadArbs(match: BetEvent): MatchedBet[] {
     if (match.markets.HeadToHead) {

@@ -1,4 +1,4 @@
-import type { Match } from "../../core/Match.js";
+import type { Match } from "../../WebScraper/utils/Match.js";
 import type { MatchedBet } from "./MatchedBet.js";
 import { Runner } from "./Runner.js";
 

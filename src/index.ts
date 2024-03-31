@@ -1,19 +1,19 @@
 // Imports.
-import type { MarketData, Scraper } from "./core/Scraper.js";
+import type { MarketData, Scraper } from "./WebScraper/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
 import { Arber } from "./Models/Arber.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
-import { WebScraper } from "./core/WebScraper.js";
+import { ScraperFactory } from "./WebScraper/ScraperFactory.js";
 import { writeFileSync } from "fs";
 
 // Scraper imports.
-import { Ladbrokes } from "./Scrapers/Ladbrokes.js";
-import { Palmerbet } from "./Scrapers/Palmerbet.js";
-import { Playup } from "./Scrapers/Playup.js";
-import { Pointsbet } from "./Scrapers/Pointsbet.js";
-import { Sportsbet } from "./Scrapers/Sportsbet.js";
-import { Tabcorp } from "./Scrapers/Tabcorp.js";
-import { Unibet } from "./Scrapers/Unibet.js";
+import { Ladbrokes } from "./WebScraper/Bookies/Ladbrokes.js";
+import { Palmerbet } from "./WebScraper/Bookies/Palmerbet.js";
+import { Playup } from "./WebScraper/Bookies/Playup.js";
+import { Pointsbet } from "./WebScraper/Bookies/Pointsbet.js";
+import { Sportsbet } from "./WebScraper/Bookies/Sportsbet.js";
+import { Tabcorp } from "./WebScraper/Bookies/Tabcorp.js";
+import { Unibet } from "./WebScraper/Bookies/Unibet.js";
 
 // Defining scrapers.
 const Scrapers: Scraper[] = [
@@ -28,7 +28,7 @@ const Scrapers: Scraper[] = [
 
 // Running webscraper on AWS Lambda.
 export async function handler(event: { [key: string]: boolean | string }): Promise<MarketData | PutObjectCommandOutput> {
-    const webscraper = new WebScraper(Scrapers);
+    const webscraper = new ScraperFactory(Scrapers);
     const marketData = await webscraper.getMarketData();
     if (event.test) {
         return marketData;
@@ -44,8 +44,8 @@ if (process.argv[2] === "TEST_SCRAPER") {
     writeFileSync("./marketData.json", JSON.stringify(data));
 } else if (process.argv[2] === "TEST_MODELS") {
     const arbot = new Arber();
-    await arbot.loadLatest();
+    await arbot.loadLatest("./marketData.json");
     arbot.filter({
-        minEv: 0
+        minEv: -1
     });
 }

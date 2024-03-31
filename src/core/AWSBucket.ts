@@ -1,5 +1,5 @@
 import { GetObjectCommand, ListObjectsCommand, PutObjectCommand, type PutObjectCommandOutput, S3Client } from "@aws-sdk/client-s3";
-import type { MarketData } from "./Scraper.js";
+import type { MarketData } from "../WebScraper/Scraper.js";
 import { configDotenv } from "dotenv";
 
 export class AWSBucket {

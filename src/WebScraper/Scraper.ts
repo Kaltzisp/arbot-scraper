@@ -1,4 +1,4 @@
-import type { Match, Offers } from "./Match.js";
+import type { Match, Offers } from "./utils/Match.js";
 
 export abstract class Scraper {
 
