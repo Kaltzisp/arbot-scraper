@@ -6,6 +6,7 @@ import { Webscraper } from "./WebScraper/Webscraper.js";
 import { writeFileSync } from "fs";
 
 // Scraper imports.
+import { Bluebet } from "./WebScraper/Bookies/BlueBet.js";
 import { Ladbrokes } from "./WebScraper/Bookies/Ladbrokes.js";
 import { Palmerbet } from "./WebScraper/Bookies/Palmerbet.js";
 import { Playup } from "./WebScraper/Bookies/Playup.js";
@@ -16,6 +17,7 @@ import { Unibet } from "./WebScraper/Bookies/Unibet.js";
 
 // Defining scrapers.
 const Scrapers: Scraper[] = [
+    new Bluebet(),
     new Ladbrokes(),
     new Palmerbet(),
     new Playup(),
