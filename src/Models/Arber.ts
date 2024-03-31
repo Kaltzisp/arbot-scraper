@@ -45,6 +45,7 @@ export class Arber {
 
     public filter(filter: MatchedBetFilter): MatchedBet[] {
         console.log("====== Matched Bets ======");
+        this.matchedBets.sort((a, b) => filter.sort === "ev" ? b.ev - a.ev : b.yield - a.yield);
         const bets = this.matchedBets.filter((bet) => {
             if (bet.ev < (filter.minEv ?? -Infinity)) {
                 return false;
@@ -59,7 +60,6 @@ export class Arber {
             }
             return true;
         }).splice(0, filter.maxResults ?? 5);
-        bets.sort((a, b) => filter.sort === "ev" ? b.ev - a.ev : b.yield - a.yield);
         bets.forEach(bet => bet.print());
         console.log("\n\n");
         return bets;
