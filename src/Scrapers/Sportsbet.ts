@@ -61,7 +61,6 @@ export class Sportsbet extends Scraper {
                     }
                 }
             }).catch((e: unknown) => {
-                console.error(`Failed to fetch markets from ${url}`)
                 console.error(e);
             }));
             await Promise.all(marketRequests);

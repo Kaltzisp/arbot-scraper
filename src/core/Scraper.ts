@@ -21,8 +21,8 @@ export abstract class Scraper {
         const response = await fetch(url, options ?? {}).catch(() => {
             throw new Error(`Failed to fetch data from ${url}`);
         });
-        const data = await response.json().catch((e: unknown) => {
-            console.error(e);
+        const data = await response.json().catch(() => {
+            throw new Error(`Malformed data recieved from ${url}`)
         }) as unknown;
         return data;
     }
