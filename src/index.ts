@@ -1,6 +1,7 @@
 // Imports.
 import type { MarketData, Scraper } from "./core/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
+import { Arber } from "./Models/Arbitrage.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
 import { WebScraper } from "./core/WebScraper.js";
 import { writeFileSync } from "fs";
@@ -38,7 +39,13 @@ export async function handler(event: { [key: string]: boolean | string }): Promi
 }
 
 // Running webscraper test instance.
-if (process.argv[2] === "TEST") {
+if (process.argv[2] === "TEST_SCRAPER") {
     const data = await handler({ test: true });
     writeFileSync("./marketData.json", JSON.stringify(data));
+} else if (process.argv[2] === "TEST_MODELS") {
+    const arbot = new Arber();
+    await arbot.loadLatest();
+    arbot.filter({
+        minEv: 0
+    });
 }
