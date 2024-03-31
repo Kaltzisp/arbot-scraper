@@ -44,7 +44,7 @@ if (process.argv[2] === "TEST_SCRAPER") {
     writeFileSync("./marketData.json", JSON.stringify(data));
 } else if (process.argv[2] === "TEST_MODELS") {
     const arbot = new Arber();
-    await arbot.loadLatest("./marketData.json");
+    await arbot.loadLatest();
     arbot.filter({
         minEv: -1
     });

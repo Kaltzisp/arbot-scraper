@@ -24,8 +24,7 @@ export class AWSBucket {
         const bucketResponse = await this.client.send(new ListObjectsCommand({
             Bucket: this.bucketName
         }));
-        const contents = bucketResponse.Contents!.sort((a, b) => b.Key!.localeCompare(a.Key!));
-        const latestKey = contents.find(object => object.Key!.startsWith("marketData"))!.Key!;
+        const latestKey = bucketResponse.Contents![bucketResponse.Contents!.length - 1].Key;
         const fileResponse = await this.client.send(new GetObjectCommand({
             Bucket: this.bucketName,
             Key: latestKey
