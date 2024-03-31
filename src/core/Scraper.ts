@@ -18,8 +18,7 @@ export abstract class Scraper {
      * @returns a promise of the JSON parsed body recieved.
      */
     protected static async getDataFromUrl(url: string, options?: RequestInit): Promise<unknown> {
-        const response = await fetch(url, options ?? {}).catch((e: unknown) => {
-            console.error(e);
+        const response = await fetch(url, options ?? {}).catch(() => {
             throw new Error(`Failed to fetch data from ${url}`);
         });
         const data = await response.json().catch((e: unknown) => {
