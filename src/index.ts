@@ -1,6 +1,7 @@
 // Imports.
 import type { MarketData, Scraper } from "./core/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
+import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
 import { WebScraper } from "./core/WebScraper.js";
 import { writeFileSync } from "fs";
 
@@ -25,23 +26,19 @@ const Scrapers: Scraper[] = [
 ];
 
 // Running webscraper on AWS Lambda.
-export async function handler(event: { [key: string]: boolean | string }): Promise<MarketData> {
+export async function handler(event: { [key: string]: boolean | string }): Promise<MarketData | PutObjectCommandOutput> {
     const webscraper = new WebScraper(Scrapers);
     const marketData = await webscraper.getMarketData();
-    const bucket = new AWSBucket();
     if (event.test) {
-        await bucket.push("arbot-webscraper-bucket", `test-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData).catch((e: unknown) => console.log(e));
         return marketData;
     }
-    await bucket.push("arbot-webscraper-bucket", "latest.json", marketData).catch((e: unknown) => console.log(e));
-    await bucket.push("arbot-webscraper-bucket", `marketData-${bucket.dateTime(marketData.meta.scrapedAt)}.json`, marketData).catch((e: unknown) => console.log(e));
-    return marketData;
+    const bucket = new AWSBucket();
+    const response = await bucket.push(marketData);
+    return response;
 }
 
 // Running webscraper test instance.
 if (process.argv[2] === "TEST") {
-    const data = await handler({ test: true }).catch((e: unknown) => {
-        console.error(e);
-    });
+    const data = await handler({ test: true });
     writeFileSync("./marketData.json", JSON.stringify(data));
 }
