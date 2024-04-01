@@ -24,7 +24,7 @@ class RunnerMapper {
             return alias;
         }
         if (this.runnerMap[compId]) {
-            const mappedName = this.runnerMap[compId]!.has(id) ? this.runnerMap[compId]!.get(id) : this.runnerMap[compId]!.get(Array.from(this.runnerMap[compId]!.keys()).find(strippedAlias => strippedAlias.includes(id))!)
+            const mappedName = this.runnerMap[compId]!.get(id) ?? this.runnerMap[compId]!.get(Array.from(this.runnerMap[compId]!.keys()).find(strippedAlias => strippedAlias.includes(id))!)
             const line = (/[+-]?[\d.]+$/u).exec(alias);
             if (mappedName && line) {
                 const modifier = parseFloat(line[0]);
