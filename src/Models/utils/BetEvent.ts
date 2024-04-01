@@ -18,11 +18,14 @@ export class BetEvent {
         this.startTime = match.startTime;
     }
 
+    /**
+     * Appends markets offered by a bookie on a match to a BetEvent.
+     * @param bookieId the bookie to add markets from.
+     * @param match the match to add markets from.
+     */
     public addMarketsFrom(bookieId: string, match: Match): void {
         for (const marketName in match.offers) {
-            if (!this.markets[marketName]) {
-                this.markets[marketName] = {};
-            }
+            this.markets[marketName] ??= {};
             for (const runnerName in match.offers[marketName]) {
                 if (!this.markets[marketName]![runnerName]) {
                     this.markets[marketName]![runnerName] = new Runner(runnerName, bookieId, match.offers[marketName]![runnerName])

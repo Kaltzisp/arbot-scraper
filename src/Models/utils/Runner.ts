@@ -14,15 +14,8 @@ export class Runner {
 
     public addOdd(bookie: string, odd: number): void {
         this.odds[bookie] = odd;
-        this.updateBestOdds();
-    }
-
-    public updateBestOdds(): void {
-        for (const bookie in this.odds) {
-            const odd = this.odds[bookie];
-            if (odd > this.bestOffer.odd) {
-                this.bestOffer = { bookie, odd };
-            }
+        if (odd > this.bestOffer.odd) {
+            this.bestOffer = { bookie, odd };
         }
     }
 
@@ -32,7 +25,7 @@ interface Odds {
     [bookie: string]: number;
 }
 
-interface BestOdd {
+export interface BestOdd {
     bookie: string;
     odd: number;
 }

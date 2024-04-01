@@ -1,6 +1,7 @@
-import type { Runner } from "./Runner.js";
+import type { BestOdd, Runner } from "./Runner.js";
 
 export class MatchedBet {
+
     public constructor(
         public matchId: string,
         public market: string,
@@ -8,7 +9,7 @@ export class MatchedBet {
     ) { }
 
     /** Returns the best offer for each side of the matched bet. */
-    public get bestOffer(): { bookie: string; odd: number }[] {
+    public get bestOffer(): BestOdd[] {
         return this.runners.map(runner => ({
             bookie: runner.bestOffer.bookie,
             odd: runner.bestOffer.odd
@@ -17,7 +18,6 @@ export class MatchedBet {
 
     /**
      * Calculates the EV of a matched bet on n outcomes.
-     * @param odds the set of odds offered by bookies.
      * @returns the expected value of a fully matched bet.
      */
     public get ev(): number {
@@ -36,17 +36,13 @@ export class MatchedBet {
     }
 
     /**
-     * Calculates the yield of a matched bonus bet.
-     * @param bonusOdd the odds for the bonus bet.
-     * @param matchedOdd the odds for the matched bet.
-     * @returns the expected return on the bonus bet.
+     * Calculates the yield of a matched bet on n outcomes.
+     * @returns the highest calculated yield on the matched bet.
      */
     public get yield(): number {
         const odds = this.bestOffer.map(offer => offer.odd);
-        return Math.max(
-            (1 / odds[0]) * (odds[0] - 1) * (odds[1] - 1),
-            (1 / odds[1]) * (odds[1] - 1) * (odds[0] - 1),
-        );
+        const yields = odds.map(bonusOdd => (bonusOdd - 1) * odds.reduce((sum, odd) => sum - 1 / odd, 1 + 1 / bonusOdd));
+        return Math.max(...yields);
     }
 
     /** Prints a matched bet to the console. */
@@ -60,5 +56,9 @@ export class MatchedBet {
         output += `Odds = ${this.runners.map(runner => Object.entries(runner.odds))}`;
         output += "\n";
         console.log(output);
+    }
+
+    public toString(): string {
+        return this.matchId;
     }
 }
