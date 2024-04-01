@@ -27,14 +27,14 @@ export class DiscordEmbed {
         };
     }
 
-    public static post(discordEmbeds: DiscordEmbed[]): void {
-        fetch(process.env.DISCORD_WEBHOOK_URL!, {
+    public static async post(discordEmbeds: DiscordEmbed[]): Promise<void> {
+        await fetch(process.env.DISCORD_WEBHOOK_URL!, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 embeds: discordEmbeds
             })
-        }).catch((e: unknown) => console.error(e));
+        });
     }
 
     private static getColor(ev: number): number {

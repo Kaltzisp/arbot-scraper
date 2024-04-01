@@ -42,7 +42,7 @@ export async function handler(event: { [key: string]: boolean | string }): Promi
     const response = await bucket.push(marketData);
     const arbot = new Arber();
     await arbot.loadLatest(marketData);
-    DiscordEmbed.post(arbot.filter({
+    await DiscordEmbed.post(arbot.filter({
         minEv: 0
     }).map(bet => new DiscordEmbed(bet)));
     return response;
