@@ -31,7 +31,7 @@ export class Playup extends Scraper {
                 event.attributes.participants[0].name,
                 event.attributes.participants[1].name,
                 event.attributes.start_time,
-                await this.scrapeOffers(compId, `https://wagering-api.playup.io/v1/event_market_groups/${event.id}`).catch((e: unknown) => {
+                await this.scrapeOffers(compId, `https://wagering-api.playup.io/v1/sport_events/${event.id}?include=event_market_groups`).catch((e: unknown) => {
                     console.error(e);
                     return {};
                 })
@@ -42,14 +42,11 @@ export class Playup extends Scraper {
     }
 
     protected async scrapeOffers(compId: string, url: string): Promise<Offers> {
+        const marketsData = await Scraper.getDataFromUrl(url) as MatchMarketsResponse;
         const offers: Offers = {};
-        const marketEndpoints = {
-            AFL: [206, 222, 223],
-            NBA: [202, 210, 211],
-            NRL: [133, 162, 168],
-        };
-        await Promise.all(marketEndpoints[compId as keyof typeof marketEndpoints].map(async (endpoint) => {
-            const data = await Scraper.getDataFromUrl(`${url}-${endpoint}`) as MarketsResponse;
+        const selectedMarkets = ["Top Markets", "Handicap Markets", "Total Markets"];
+        await Promise.all(marketsData.included.filter(market => selectedMarkets.includes(market.attributes.name)).map(async (marketType) => {
+            const data = await Scraper.getDataFromUrl(`https://wagering-api.playup.io/v1/event_market_groups/${marketType.id}`) as MarketsResponse;
             for (const entry of data.included) {
                 if (entry.type === "markets") {
                     const marketName = this.parseMarketName(entry.attributes.name);
@@ -84,6 +81,15 @@ interface MatchesResponse {
         links: {
             self: string;
         };
+    }[];
+}
+
+interface MatchMarketsResponse {
+    included: {
+        id: string;
+        attributes: {
+            name: string;
+        }
     }[];
 }
 
