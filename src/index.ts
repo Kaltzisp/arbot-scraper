@@ -2,6 +2,7 @@
 import { type MarketData, Scraper } from "./WebScraper/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
 import { Arber } from "./Models/Arber.js";
+import { DiscordEmbed } from "./core/Webhooks.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
 import { configDotenv } from "dotenv";
 import { writeFileSync } from "fs";
@@ -39,18 +40,21 @@ export async function handler(event: { [key: string]: boolean | string }): Promi
     }
     const bucket = new AWSBucket();
     const response = await bucket.push(marketData);
-    const arbot = new Arber(marketData);
-    arbot.filter({
+    const arbot = new Arber();
+    await arbot.loadLatest(marketData);
+    DiscordEmbed.post(arbot.filter({
         minEv: 0
-    });
+    }).map(bet => new DiscordEmbed(bet)));
     return response;
 }
 
-// Running webscraper test instance.
 if (process.argv[2] === "TEST_SCRAPER") {
+    // Running webscraper test instance.
     const data = await handler({ test: true });
     writeFileSync("./marketData.json", JSON.stringify(data));
+
 } else if (process.argv[2] === "TEST_MODELS") {
+    // Running models test instance.
     const arbot = new Arber();
     await arbot.loadLatest();
     arbot.filter({
