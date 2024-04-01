@@ -10,7 +10,7 @@
     },
     "scripts": {
         "build": "rm -rf app/* && npx tsc -p tsconfig.json",
-        "cpfs": "cp ./package.json ./package-lock.json ./app && npm install --prefix=./app --omit=dev && rm ./app/node_modules/arbot-scraper && rm -r ./app/Models",
+        "cpfs": "cp ./package.json ./package-lock.json ./app && npm install --prefix=./app --omit=dev && rm ./app/node_modules/arbot-scraper",
         "zip": "7z a -tzip arbscraper.zip ./app/* && mv arbscraper.zip ./app/arbscraper.zip",
         "deploy": "npm run build && npm run cpfs && npm run zip && aws lambda update-function-code --function-name=arbot-webscraper --zip-file fileb://app/arbscraper.zip"
     },
