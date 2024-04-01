@@ -1,53 +1,53 @@
-import { type CompData, Scraper, } from "../Scraper.js";
+import { type CompData, type MarketParser, Scraper } from "../Scraper.js";
 import { Match, type Offers } from "../utils/Match.js";
 import { Mapper } from "../utils/Mapper.js";
 
 export class Pointsbet extends Scraper {
 
     protected bookieEndpoints = {
-        RugbyLeague: {
-            NRL: "https://api.au.pointsbet.com/api/v2/competitions/7593/events/featured?includeLive=false"
-        },
-        AussieRules: {
+        "Aussie Rules": {
             AFL: "https://api.au.pointsbet.com/api/v2/competitions/7523/events/featured?includeLive=false"
         },
-        Baketball: {
+        "Basketball": {
             NBA: "https://api.au.pointsbet.com/api/v2/competitions/7176/events/featured?includeLive=false"
-        }
+        },
+        "Rugby League": {
+            NRL: "https://api.au.pointsbet.com/api/v2/competitions/7593/events/featured?includeLive=false"
+        },
     };
 
-    protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
+    protected marketParser: MarketParser = {
+        HeadToHead: name => (name.startsWith("Match Result") && !name.includes("After")) || name.startsWith("Moneyline ("),
+        Lines: name => name.startsWith("Pick Your Own Line"),
+        Totals: name => name.startsWith("Alternate Total"),
+    };
+
+    protected async scrapeComp(compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url) as MatchesResponse;
-        const comp: CompData = {}
-        const promises: Promise<void>[] = [];
-        for (const event of data.events) {
+        const comp: CompData = {};
+        await Promise.all(data.events.map(async (event) => {
             const match = new Match(
                 compId,
                 event.homeTeam,
                 event.awayTeam,
-                Date.parse(event.startsAt)
+                event.startsAt,
+                await this.scrapeOffers(compId, `https://api.au.pointsbet.com/api/mes/v3/events/${event.key}`).catch((e: unknown) => {
+                    console.error(e);
+                    return {};
+                })
             );
-            promises.push(this.scrapeMarkets(compId, `https://api.au.pointsbet.com/api/mes/v3/events/${event.key}`).then((matchOffers) => {
-                match.offers = matchOffers;
-                comp[match.id] = match;
-            }).catch((e: unknown) => {
-                console.error(e);
-                comp[match.id] = match;
-            }));
-        }
-        await Promise.all(promises);
+            comp[match.id] = match;
+        }));
         return comp;
     }
 
-    protected async scrapeMarkets(compId: string, url: string): Promise<Offers> {
+    protected async scrapeOffers(compId: string, url: string): Promise<Offers> {
         const data = await Scraper.getDataFromUrl(url) as MarketsResponse;
         const offers: Offers = {};
         for (const market of data.fixedOddsMarkets) {
             const marketName = this.parseMarketName(market.name);
             if (marketName) {
-                if (!offers[marketName]) {
-                    offers[marketName] = {};
-                }
+                offers[marketName] ??= {};
                 for (const runner of market.outcomes) {
                     const runnerName = Mapper.mapRunner(compId, runner.name);
                     offers[marketName]![runnerName] = runner.price;
@@ -57,18 +57,6 @@ export class Pointsbet extends Scraper {
         }
         return offers;
     }
-
-    protected parseMarketName(name: string): string | false {
-        if ((name.startsWith("Match Result") && !name.includes("After")) || name.startsWith("Moneyline (")) {
-            return "HeadToHead";
-        } else if (name.startsWith("Pick Your Own Line")) {
-            return "Lines";
-        } else if (name.startsWith("Alternate Total")) {
-            return "Totals";
-        }
-        return false;
-    }
-
 }
 
 interface MatchesResponse {

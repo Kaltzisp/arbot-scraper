@@ -1,8 +1,7 @@
 // Imports.
-import type { MarketData, Scraper } from "./WebScraper/Scraper.js";
+import { type MarketData, Scraper } from "./WebScraper/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
-import { Webscraper } from "./WebScraper/Webscraper.js";
 import { writeFileSync } from "fs";
 
 // Scraper imports.
@@ -16,7 +15,7 @@ import { Tabcorp } from "./WebScraper/Bookies/Tabcorp.js";
 import { Unibet } from "./WebScraper/Bookies/Unibet.js";
 
 // Defining scrapers.
-const Scrapers: Scraper[] = [
+const scrapers: Scraper[] = [
     new Bluebet(),
     new Ladbrokes(),
     new Palmerbet(),
@@ -29,8 +28,7 @@ const Scrapers: Scraper[] = [
 
 // Running webscraper on AWS Lambda.
 export async function handler(event: { [key: string]: boolean | string }): Promise<MarketData | PutObjectCommandOutput> {
-    const webscraper = new Webscraper(Scrapers);
-    const marketData = await webscraper.getMarketData();
+    const marketData = await Scraper.getMarketData(scrapers);
     if (event.test) {
         return marketData;
     }

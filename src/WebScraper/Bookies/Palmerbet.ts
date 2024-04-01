@@ -1,85 +1,70 @@
-import { type CompData, Scraper, } from "../Scraper.js";
+import { type CompData, type MarketParser, Scraper } from "../Scraper.js";
 import { Match, type Offers } from "../utils/Match.js";
 import { Mapper } from "../utils/Mapper.js";
 
 export class Palmerbet extends Scraper {
 
     protected bookieEndpoints = {
-        RugbyLeague: {
-            NRL: "https://fixture.palmerbet.online/fixtures/sports/9587e5c4-8dd8-403d-b516-6dd69d2f42ef/matches"
-        },
-        AussieRules: {
+        "Aussie Rules": {
             AFL: "https://fixture.palmerbet.online/fixtures/sports/2178a143-5780-4d12-a471-100daaa76852/matches"
         },
-        Basketball: {
+        "Basketball": {
             NBA: "https://fixture.palmerbet.online/fixtures/sports/1c2eeb3a-6bab-4ac2-b434-165cc350180f/matches"
+        },
+        "Rugby League": {
+            NRL: "https://fixture.palmerbet.online/fixtures/sports/9587e5c4-8dd8-403d-b516-6dd69d2f42ef/matches"
         }
     };
 
-    protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
+    protected marketParser: MarketParser = {
+        HeadToHead: name => name === "Match Result",
+        Lines: name => name === "Pick Your Own Line" || name === "Pick Your Line",
+        Totals: name => name === "Alternative Total Match Points" || name === "Pick Your Own Total"
+    };
+
+    protected async scrapeComp(compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url) as MatchesResponse;
-        const comp: CompData = {}
-        const promises: Promise<void>[] = [];
-        for (const event of data.matches) {
+        const comp: CompData = {};
+        await Promise.all(data.matches.map(async (event) => {
             const match = new Match(
                 compId,
                 event.homeTeam.title,
                 event.awayTeam.title,
-                Date.parse(event.startTime)
+                event.startTime,
+                await this.scrapeOffers(compId, `https://fixture.palmerbet.online/fixtures/sports/matches/${event.eventId}/markets?pageSize=1000`).catch((e: unknown) => {
+                    console.error(e);
+                    return {};
+                })
             );
-            promises.push(this.scrapeMarkets(compId, `https://fixture.palmerbet.online/fixtures/sports/matches/${event.eventId}/markets?pageSize=1000`).then((matchOffers) => {
-                match.offers = matchOffers;
-                comp[match.id] = match;
-            }).catch((e: unknown) => {
-                console.error(e);
-                comp[match.id] = match;
-            }));
-        }
-        await Promise.all(promises);
+            comp[match.id] = match;
+        }));
         return comp;
     }
 
-    protected async scrapeMarkets(compId: string, url: string): Promise<Offers> {
+    protected async scrapeOffers(compId: string, url: string): Promise<Offers> {
         const data = await Scraper.getDataFromUrl(url) as MatchMarketsResponse;
         const offers: Offers = {};
-        const marketRequests = [];
         const selectedMarkets = ["Match Result", "Pick Your Line", "Pick Your Own Line", "Alternative Total Match Points", "Pick Your Own Total"];
-        const marketGroups = data.markets.filter(marketType => selectedMarkets.includes(marketType.title));
-        for (const marketType of marketGroups) {
+        const marketPromises = [];
+        for (const marketType of data.markets.filter(market => selectedMarkets.includes(market.title))) {
             await new Promise((resolve) => { setTimeout(resolve, 500); });
-            marketRequests.push((Scraper.getDataFromUrl(`https://fixture.palmerbet.online${marketType._links[0].href}`) as Promise<MarketsResponse>).then((market) => {
-                const marketName = this.parseMarketName(market.market.title);
-                if (marketName) {
-                    if (!offers[marketName]) {
-                        offers[marketName] = {};
-                    }
-                    for (const runner of market.market.outcomes) {
-                        if (runner.status === "Active") {
-                            const runnerName = Mapper.mapRunner(compId, runner.title)
-                            offers[marketName]![runnerName] = runner.prices[0].priceSnapshot.current;
-                        }
+            marketPromises.push((Scraper.getDataFromUrl(`https://fixture.palmerbet.online${marketType._links[0].href}`) as Promise<MarketsResponse>));
+        }
+        const markets = await Promise.all(marketPromises);
+        for (const market of markets) {
+            const marketName = this.parseMarketName(market.market.title);
+            if (marketName) {
+                offers[marketName] ??= {};
+                for (const runner of market.market.outcomes) {
+                    if (runner.status === "Active") {
+                        const runnerName = Mapper.mapRunner(compId, runner.title)
+                        offers[marketName]![runnerName] = runner.prices[0].priceSnapshot.current;
                     }
                 }
-            }).catch((e: unknown) => {
-                console.error(`Failed to fetch markets from ${url}`)
-                console.error(e);
-            }));
-            await Promise.all(marketRequests);
+            }
         }
         return offers;
     }
-
-    protected parseMarketName(name: string): string | false {
-        if (name === "Match Result") {
-            return "HeadToHead";
-        } else if (name === "Pick Your Own Line" || name === "Pick Your Line") {
-            return "Lines";
-        } else if (name === "Alternative Total Match Points" || name === "Pick Your Own Total") {
-            return "Totals";
-        }
-        return false;
-    }
-
 }
 
 interface MatchesResponse {

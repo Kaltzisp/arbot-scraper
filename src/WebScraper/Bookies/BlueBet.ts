@@ -1,91 +1,72 @@
-import { type CompData, Scraper, } from "../Scraper.js";
+import { type CompData, type MarketParser, Scraper } from "../Scraper.js";
 import { Match, type Offers } from "../utils/Match.js";
 import { Mapper } from "../utils/Mapper.js";
 
 export class Bluebet extends Scraper {
 
     protected bookieEndpoints = {
-        RugbyLeague: {
-            NRL: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=42626"
-        },
-        AussieRules: {
+        "Aussie Rules": {
             AFL: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=43735"
         },
-        Baketball: {
+        "Basketball": {
             NBA: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=39251"
+        },
+        "Rugby League": {
+            NRL: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=42626"
         }
     };
 
-    protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
-        const options: RequestInit = {
-            headers: {
-                "Content-Type": "application/json",
-                "Origin": "https://www.bluebet.com.au"
-            }
-        };
-        const data = await Scraper.getDataFromUrl(url, options) as MatchesResponse;
-        const comp: CompData = {}
-        const promises: Promise<void>[] = [];
-        for (const event of data.MasterCategories[0].Categories[0].MasterEvents) {
+    protected marketParser: MarketParser = {
+        HeadTohead: name => name === "Match Result" || name === "Money Line",
+        Lines: name => name === "Pick Your Own Line" || name.startsWith("Point Spread "),
+        Totals: name => name.startsWith("Total Points Over/Under")
+    };
+
+    private readonly headers = {
+        "Content-Type": "application/json",
+        "Origin": "https://www.bluebet.com.au"
+    };
+
+    protected async scrapeComp(compId: string, url: string): Promise<CompData> {
+        const data = await Scraper.getDataFromUrl(url, this.headers) as MatchesResponse;
+        const comp: CompData = {};
+        await Promise.all(data.MasterCategories[0].Categories[0].MasterEvents.map(async (event) => {
+            const teams = event.MasterEventName.split(/ [@v] /u);
             const match = new Match(
                 compId,
-                event.MasterEventName.split(/ [@v] /u)[0],
-                event.MasterEventName.split(/ [@v] /u)[1],
-                Date.parse(event.MaxAdvertisedStartTime)
+                teams[0],
+                teams[1],
+                event.MaxAdvertisedStartTime,
+                await this.scrapeOffers(compId, `https://web20-api.bluebet.com.au/MasterEvent?MasterEventId=${event.MasterEventId}`).catch((e: unknown) => {
+                    console.error(e);
+                    return {};
+                })
             );
-            promises.push(this.scrapeMarkets(compId, `https://web20-api.bluebet.com.au/MasterEvent?MasterEventId=${event.MasterEventId}`).then((matchOffers) => {
-                match.offers = matchOffers;
-                comp[match.id] = match;
-            }).catch((e: unknown) => {
-                console.error(e);
-                comp[match.id] = match;
-            }));
-        }
-        await Promise.all(promises);
+            comp[match.id] = match;
+        }));
         return comp;
     }
 
-    protected async scrapeMarkets(compId: string, url: string): Promise<Offers> {
-        const options: RequestInit = {
-            headers: {
-                "Content-Type": "application/json",
-                "Origin": "https://www.bluebet.com.au"
-            }
-        };
-        const data = await Scraper.getDataFromUrl(url, options) as MarketsResponse;
+    protected async scrapeOffers(compId: string, url: string): Promise<Offers> {
+        const data = await Scraper.getDataFromUrl(url, this.headers) as MarketsResponse;
         const offers: Offers = {};
-        for (const group of data.GroupLinks) {
-            if (group.GroupName === "Handicap Markets" || group.GroupName === "Total Markets") {
-                const groupData = await Scraper.getDataFromUrl(`${url}&GroupTypeCode=${group.GroupTypeCode}`, options) as MarketsResponse;
-                data.Events = data.Events.concat(groupData.Events);
-            }
-        }
+        const selectedMarkets = ["Handicap Markets", "Total Markets"];
+        await Promise.all(data.GroupLinks.filter(group => selectedMarkets.includes(group.GroupName)).map(async (group) => {
+            const groupData = await Scraper.getDataFromUrl(`${url}&GroupTypeCode=${group.GroupTypeCode}`, this.headers) as MarketsResponse;
+            data.Events = data.Events.concat(groupData.Events);
+        }));
         for (const event of data.Events) {
-            for (const outcome of event.Outcomes) {
-                const marketName = this.parseMarketName(outcome.GroupByHeader);
+            for (const runner of event.Outcomes) {
+                const marketName = this.parseMarketName(runner.GroupByHeader);
                 if (marketName) {
-                    if (!offers[marketName]) {
-                        offers[marketName] = {};
-                    }
-                    const runnerName = Mapper.mapRunner(compId, outcome.Points === 0 ? outcome.OutcomeName : `${outcome.OutcomeName} ${outcome.Points}`);
-                    offers[marketName]![runnerName] = outcome.Price;
+                    offers[marketName] ??= {};
+                    const runnerName = Mapper.mapRunner(compId, runner.Points === 0 ? runner.OutcomeName : `${runner.OutcomeName} ${runner.Points}`);
+                    offers[marketName]![runnerName] = runner.Price;
                 }
             }
         }
         return offers;
     }
-
-    protected parseMarketName(name: string): string | false {
-        if (name === "Match Result" || name === "Money Line") {
-            return "HeadToHead";
-        } else if (name === "Pick Your Own Line" || name.startsWith("Point Spread ")) {
-            return "Lines";
-        } else if (name.startsWith("Total Points Over/Under")) {
-            return "Totals";
-        }
-        return false;
-    }
-
 }
 
 interface MatchesResponse {

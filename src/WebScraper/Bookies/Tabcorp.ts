@@ -1,53 +1,53 @@
-import { type CompData, Scraper, } from "../Scraper.js";
+import { type CompData, type MarketParser, Scraper } from "../Scraper.js";
 import { Match, type Offers } from "../utils/Match.js";
 import { Mapper } from "../utils/Mapper.js";
 
 export class Tabcorp extends Scraper {
 
     protected bookieEndpoints = {
-        RugbyLeague: {
-            NRL: "https://api.beta.tab.com.au/v1/tab-info-service/sports/Rugby%20League/competitions/NRL?jurisdiction=NSW"
-        },
-        AussieRules: {
+        "Aussie Rules": {
             AFL: "https://api.beta.tab.com.au/v1/tab-info-service/sports/AFL%20Football/competitions/AFL?jurisdiction=NSW"
         },
-        Basketball: {
+        "Basketball": {
             NBA: "https://api.beta.tab.com.au/v1/tab-info-service/sports/Basketball/competitions/NBA?jurisdiction=NSW"
+        },
+        "Rugby League": {
+            NRL: "https://api.beta.tab.com.au/v1/tab-info-service/sports/Rugby%20League/competitions/NRL?jurisdiction=NSW"
         }
     };
 
-    protected async scrapeComp(sportId: string, compId: string, url: string): Promise<CompData> {
+    protected marketParser: MarketParser = {
+        HeadToHead: name => name === "Head To Head",
+        Lines: name => name === "Pick Your Own Line",
+        Totals: name => name.startsWith("Pick Your Own Total")
+    };
+
+    protected async scrapeComp(compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url) as MatchesResponse;
-        const comp: CompData = {}
-        const promises: Promise<void>[] = [];
-        for (const event of data.matches) {
+        const comp: CompData = {};
+        await Promise.all(data.matches.map(async (event) => {
             const match = new Match(
                 compId,
                 event.competitors[0],
                 event.competitors[1],
-                Date.parse(event.startTime)
+                event.startTime,
+                await this.scrapeOffers(compId, event._links.self).catch((e: unknown) => {
+                    console.error(e);
+                    return {};
+                })
             );
-            promises.push(this.scrapeMarkets(compId, event._links.self).then((matchOffers) => {
-                match.offers = matchOffers;
-                comp[match.id] = match;
-            }).catch((e: unknown) => {
-                console.error(e);
-                comp[match.id] = match;
-            }));
-        }
-        await Promise.all(promises);
+            comp[match.id] = match;
+        }));
         return comp;
     }
 
-    protected async scrapeMarkets(compId: string, url: string): Promise<Offers> {
+    protected async scrapeOffers(compId: string, url: string): Promise<Offers> {
         const data = await Scraper.getDataFromUrl(url) as MarketsResponse;
         const offers: Offers = {};
         for (const market of data.markets) {
             const marketName = this.parseMarketName(market.betOption);
             if (marketName) {
-                if (!offers[marketName]) {
-                    offers[marketName] = {};
-                }
+                offers[marketName] ??= {};
                 for (const runner of market.propositions) {
                     const runnerName = Mapper.mapRunner(compId, runner.name);
                     offers[marketName]![runnerName] = runner.returnWin;
@@ -57,18 +57,6 @@ export class Tabcorp extends Scraper {
         }
         return offers;
     }
-
-    protected parseMarketName(name: string): string | false {
-        if (name === "Head To Head") {
-            return "HeadToHead";
-        } else if (name === "Pick Your Own Line") {
-            return "Lines";
-        } else if (name.startsWith("Pick Your Own Total")) {
-            return "Totals";
-        }
-        return false;
-    }
-
 }
 
 
