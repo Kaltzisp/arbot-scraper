@@ -33,9 +33,9 @@ export function findTotalsArbs(match: BetEvent): MatchedBet[] {
         return [];
     }
     const bets: MatchedBet[] = [];
-    const underRunners = Object.entries(market).filter(([runnerName]) => runnerName.includes("<"));
+    const underRunners = Object.entries(market).filter(([runnerName]) => runnerName.includes("Under"));
     underRunners.forEach(([runnerName, runner]) => {
-        const matchedName = runnerName.replace("<", ">");
+        const matchedName = runnerName.replace("Under", "Over");
         const overRunner = Object.entries(market).find(([name]) => name === matchedName);
         if (overRunner) {
             bets.push(new MatchedBet(match.id, "Alternate Totals", [runner!, overRunner[1]!]));

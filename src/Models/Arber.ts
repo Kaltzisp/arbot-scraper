@@ -33,6 +33,8 @@ export class Arber {
                             } else {
                                 this.matches[matchId.split(" vs ").reverse().join(" vs ")]!.addMarketsFrom(bookieId, this.marketData.data[bookieId][sportId][compId][matchId]);
                             }
+                        } else {
+                            this.matches[matchId]!.addMarketsFrom(bookieId, this.marketData.data[bookieId][sportId][compId][matchId]);
                         }
                     }
                 }
