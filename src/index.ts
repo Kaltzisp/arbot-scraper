@@ -58,7 +58,6 @@ if (process.argv[2] === "TEST_SCRAPER") {
     const arbot = new Arber();
     await arbot.loadLatest();
     arbot.filter({
-        minEv: -0.05,
-        bookie: "Playup"
+        minEv: 0
     }).forEach(bet => bet.print());
 }
