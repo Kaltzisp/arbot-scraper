@@ -51,7 +51,6 @@ export class Arber {
     }
 
     public filter(filter: MatchedBetFilter): MatchedBet[] {
-        console.log("====== Matched Bets ======");
         this.matchedBets.sort((a, b) => filter.sort === "yield" ? b.yield - a.yield : b.ev - a.ev);
         const bets = this.matchedBets.filter((bet) => {
             if (bet.ev < (filter.minEv ?? -Infinity)) {

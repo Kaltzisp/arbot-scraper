@@ -34,7 +34,7 @@ export class DiscordEmbed {
             body: JSON.stringify({
                 embeds: discordEmbeds
             })
-        }).catch((e: unknown) => console.log(e));
+        }).catch((e: unknown) => console.error(e));
     }
 
     private static getColor(ev: number): number {
