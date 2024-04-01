@@ -55,5 +55,5 @@ if (process.argv[2] === "TEST_SCRAPER") {
     await arbot.loadLatest();
     arbot.filter({
         minEv: 0
-    });
+    }).forEach(bet => bet.print());
 }
