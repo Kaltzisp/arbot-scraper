@@ -47,14 +47,14 @@ export class MatchedBet {
 
     /** Prints a matched bet to the console. */
     public print(): void {
-        let output = `${this.matchId}\n`;
-        output += `EV = ${this.ev} @ ${this.market}\n`;
-        output += `Yield = ${this.yield} @ ${this.market}\n`;
-        for (let i = 0; i < this.bestOffer.length; i += 1) {
-            output += `${this.runners[i].name} @ ${this.bestOffer[i].odd} on ${this.bestOffer[i].bookie}\n`
-        }
-        output += `Odds = ${this.runners.map(runner => Object.entries(runner.odds))}`;
-        output += "\n";
+        let output = `${"=".repeat(50)}\n`;
+        output += `${this.matchId} - ${this.market}\n`;
+        output += `EV = ${(this.ev * 100).toFixed(2)}    Yield = ${(this.yield * 100).toFixed(2)}\n\n`;
+        this.runners.forEach((runner) => {
+            output += `${runner.name} @ $${runner.bestOffer.odd} on ${runner.bestOffer.bookie}\n`
+        });
+        output += this.runners.map(runner => Object.entries(runner.odds).map(([bookie, odd]) => `${bookie}: $${odd}`).join(", ")).join("\n");
+        output += `\n${"=".repeat(50)}\n\n`;
         console.log(output);
     }
 
