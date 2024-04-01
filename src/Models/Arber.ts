@@ -14,6 +14,10 @@ export class Arber {
     } = {};
     private readonly matchedBets: MatchedBet[] = [];
 
+    public constructor(marketData?: MarketData) {
+        if (marketData) { this.marketData = marketData; }
+    }
+
     public async loadLatest(file?: string): Promise<void> {
         // Get from local file if specified.
         if (file) {
