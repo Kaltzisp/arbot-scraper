@@ -2,6 +2,7 @@ import { findHeadToHeadArbs, findLineArbs, findTotalsArbs } from "./utils/findAr
 import { readFileSync, writeFileSync } from "fs";
 import { AWSBucket } from "../core/AWSBucket.js";
 import { BetEvent } from "./utils/BetEvent.js";
+import { DiscordEmbed } from "../core/Webhooks.js";
 import type { MarketData } from "../WebScraper/Scraper.js";
 import type { MatchedBet } from "./utils/MatchedBet.js";
 
@@ -66,8 +67,8 @@ export class Arber {
             }
             return true;
         }).splice(0, filter.maxResults ?? 5);
-        bets.forEach(bet => bet.print());
-        console.log("\n\n");
+        const discordEmbeds = bets.map(bet => new DiscordEmbed(bet));
+        DiscordEmbed.post(discordEmbeds);
         return bets;
     }
 }

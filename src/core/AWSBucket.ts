@@ -1,15 +1,10 @@
 import { GetObjectCommand, ListObjectsCommand, PutObjectCommand, type PutObjectCommandOutput, S3Client } from "@aws-sdk/client-s3";
 import type { MarketData } from "../WebScraper/Scraper.js";
-import { configDotenv } from "dotenv";
 
 export class AWSBucket {
 
     public readonly client: S3Client = new S3Client({ region: "ap-southeast-4", });
     private readonly bucketName = "arbot-webscraper-bucket";
-
-    public constructor() {
-        configDotenv();
-    }
 
     public async push(marketData: MarketData): Promise<PutObjectCommandOutput> {
         const response = await this.client.send(new PutObjectCommand({

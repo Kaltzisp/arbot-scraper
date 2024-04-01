@@ -2,6 +2,7 @@
 import { type MarketData, Scraper } from "./WebScraper/Scraper.js";
 import { AWSBucket } from "./core/AWSBucket.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
+import { configDotenv } from "dotenv";
 import { writeFileSync } from "fs";
 
 // Scraper imports.
@@ -13,6 +14,9 @@ import { Pointsbet } from "./WebScraper/Bookies/Pointsbet.js";
 import { Sportsbet } from "./WebScraper/Bookies/Sportsbet.js";
 import { Tabcorp } from "./WebScraper/Bookies/Tabcorp.js";
 import { Unibet } from "./WebScraper/Bookies/Unibet.js";
+
+// Configuring environment variables.
+configDotenv();
 
 // Defining scrapers.
 const scrapers: Scraper[] = [
@@ -46,6 +50,6 @@ if (process.argv[2] === "TEST_SCRAPER") {
     const arbot = new Arber.Arber();
     await arbot.loadLatest();
     arbot.filter({
-        minEv: 0.0025
+        minEv: 0
     });
 }
