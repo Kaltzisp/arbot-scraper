@@ -8,7 +8,7 @@ import { configDotenv } from "dotenv";
 import { writeFileSync } from "fs";
 
 // Scraper imports.
-import { Bluebet } from "./WebScraper/Bookies/BlueBet.js";
+import { Bluebet } from "./WebScraper/Bookies/Bluebet.js";
 import { Ladbrokes } from "./WebScraper/Bookies/Ladbrokes.js";
 import { Palmerbet } from "./WebScraper/Bookies/Palmerbet.js";
 import { Playup } from "./WebScraper/Bookies/Playup.js";
@@ -58,6 +58,7 @@ if (process.argv[2] === "TEST_SCRAPER") {
     const arbot = new Arber();
     await arbot.loadLatest();
     arbot.filter({
-        minEv: 0
+        minEv: -0.05,
+        bookie: "Playup"
     }).forEach(bet => bet.print());
 }
