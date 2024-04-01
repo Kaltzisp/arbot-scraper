@@ -46,6 +46,6 @@ if (process.argv[2] === "TEST_SCRAPER") {
     const arbot = new Arber.Arber();
     await arbot.loadLatest();
     arbot.filter({
-        minEv: 0
+        minEv: 0.0025
     });
 }
