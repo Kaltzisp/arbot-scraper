@@ -62,17 +62,13 @@ export class Arber {
     public filter(filter: MatchedBetFilter): MatchedBet[] {
         this.matchedBets.sort((a, b) => filter.sort === "yield" ? b.yield - a.yield : b.ev - a.ev);
         const bets = this.matchedBets.filter((bet) => {
-            if (bet.ev < (filter.minEv ?? -Infinity)) {
-                return false;
-            }
-            if (bet.yield < (filter.minYield ?? -Infinity)) {
-                return false;
-            }
-            if (filter.bookie) {
-                if (!bet.bestOffer.map(offer => offer.bookie).includes(filter.bookie)) {
-                    return false;
-                }
-            }
+            if (
+                (bet.ev < (filter.minEv ?? -Infinity)) ||
+                (bet.yield < (filter.minYield ?? -Infinity)) ||
+                (!filter.inPlay && Date.now() > bet.startTime) ||
+                (filter.match && !bet.matchId.includes(filter.match)) ||
+                (filter.bookie && !bet.bestOffer.map(offer => offer.bookie).includes(filter.bookie))
+            ) { return false; }
             return true;
         }).splice(0, filter.maxResults ?? 5);
         return bets;
@@ -86,4 +82,5 @@ interface MatchedBetFilter {
     minYield?: number;
     sort?: "ev" | "yield";
     maxResults?: number;
+    inPlay?: boolean;
 }
