@@ -50,7 +50,7 @@ export async function handler(event: { [key: string]: boolean | string }): Promi
 
 if (process.argv[2] === "TEST_SCRAPER") {
     // Running webscraper test instance.
-    const data = await handler({ test: true });
+    const data = await handler({ test: true }) as MarketData;
     writeFileSync("./marketData.json", JSON.stringify(data));
 
 } else if (process.argv[2] === "TEST_MODELS") {
