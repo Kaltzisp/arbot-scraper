@@ -40,7 +40,7 @@ export class DiscordEmbed {
     private static getColor(ev: number): number {
         if (ev < 0) { return 0xFF0000; }
         if (ev === 0) { return 0xDDDDDD; }
-        const hex = Math.round(16 - Math.max(Math.min(ev / 0.04, 1), 0) * 16);
+        const hex = Math.round(15- Math.max(Math.min(ev / 0.04, 1), 0) * 15);
         return parseInt(`ff${hex.toString(16).repeat(2)}ff`, 16);
     }
 
