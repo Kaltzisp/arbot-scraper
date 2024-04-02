@@ -40,8 +40,8 @@ export class DiscordEmbed {
     private static getColor(ev: number): number {
         if (ev < 0) { return 0xFF0000; }
         if (ev === 0) { return 0xDDDDDD; }
-        const hex = Math.round(16 - Math.max(Math.min(ev / 0.02, 1), 0) * 16);
-        return parseInt(`${hex.toString(16).repeat(2)}ffff`, 16);
+        const hex = Math.round(16 - Math.max(Math.min(ev / 0.04, 1), 0) * 16);
+        return parseInt(`ff${hex.toString(16).repeat(2)}ff`, 16);
     }
 
     private addField(name: string, value: string, inline?: boolean): void {
