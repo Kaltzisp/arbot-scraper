@@ -5,6 +5,7 @@ export class MatchedBet {
     public constructor(
         public matchId: string,
         public market: string,
+        public startTime: number,
         public runners: Runner[]
     ) { }
 

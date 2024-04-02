@@ -4,7 +4,7 @@ import type { Runner } from "./Runner.js";
 
 export function findHeadToHeadArbs(match: BetEvent): MatchedBet[] {
     if (match.markets.HeadToHead) {
-        return [new MatchedBet(match.id, "Head to Head", (Object.values(match.markets.HeadToHead) as Runner[]))];
+        return [new MatchedBet(match.id, "Head to Head", match.startTime, (Object.values(match.markets.HeadToHead) as Runner[]))];
     }
     return [];
 }
@@ -21,7 +21,7 @@ export function findLineArbs(match: BetEvent): MatchedBet[] {
         matchedName = matchedName.includes("+") ? matchedName.replace("+", "-") : matchedName.replace("-", "+");
         const awayRunner = Object.entries(market).find(([name]) => name === matchedName);
         if (awayRunner) {
-            bets.push(new MatchedBet(match.id, "Alternate Lines", [runner!, awayRunner[1]!]));
+            bets.push(new MatchedBet(match.id, "Alternate Lines", match.startTime, [runner!, awayRunner[1]!]));
         }
     });
     return bets;
@@ -38,7 +38,7 @@ export function findTotalsArbs(match: BetEvent): MatchedBet[] {
         const matchedName = runnerName.replace("Under", "Over");
         const overRunner = Object.entries(market).find(([name]) => name === matchedName);
         if (overRunner) {
-            bets.push(new MatchedBet(match.id, "Alternate Totals", [runner!, overRunner[1]!]));
+            bets.push(new MatchedBet(match.id, "Alternate Totals", match.startTime, [runner!, overRunner[1]!]));
         }
     });
     return bets;
