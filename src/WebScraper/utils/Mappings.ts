@@ -11,7 +11,7 @@ export const MAPPINGS: Mappings = {
         "Greater Western Sydney Giants": ["Greater Western Sydney Giants", "GWS Giants"],
         "Hawthorn Hawks": ["Hawthorn Hawks"],
         "Melbourne Demons": ["Melbourne Demons"],
-        "North Melbourne Kangaroos": ["North Melbourne Kangaroos"],
+        "North Melbourne Kangaroos": ["North Melbourne Kangaroos", "Nth Melb"],
         "Port Adelaide Power": ["Port Adelaide Power"],
         "Richmond Tigers": ["Richmond Tigers"],
         "St Kilda Saints": ["St Kilda Saints"],
