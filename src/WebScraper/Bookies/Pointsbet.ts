@@ -8,6 +8,9 @@ export class Pointsbet extends Scraper {
         "Aussie Rules": {
             AFL: "https://api.au.pointsbet.com/api/v2/competitions/7523/events/featured?includeLive=false"
         },
+        "Baseball": {
+            MLB: "https://api.au.pointsbet.com/api/v2/competitions/112658/events/featured?includeLive=false"
+        },
         "Basketball": {
             NBA: "https://api.au.pointsbet.com/api/v2/competitions/7176/events/featured?includeLive=false"
         },
@@ -17,9 +20,11 @@ export class Pointsbet extends Scraper {
     };
 
     protected marketParser: MarketParser = {
-        HeadToHead: name => (name.startsWith("Match Result") && !name.includes("After")) || name.startsWith("Moneyline ("),
-        Lines: name => name.startsWith("Pick Your Own Line"),
-        Totals: name => name.startsWith("Alternate Total"),
+        HeadToHead: name =>
+            (name.startsWith("Match Result") && !name.includes("After")) ||
+            (name.startsWith("Moneyline (") && name.match(/\(/gu)?.length === 1),
+        Lines: name => name.startsWith("Pick Your Own Line") || name.startsWith("Alternate Run Line ("),
+        Totals: name => name.startsWith("Alternate Total") && !name.includes("3-Way"),
     };
 
     protected async scrapeComp(compId: string, url: string): Promise<CompData> {

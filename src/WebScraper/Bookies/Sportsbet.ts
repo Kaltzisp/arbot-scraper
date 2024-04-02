@@ -8,6 +8,9 @@ export class Sportsbet extends Scraper {
         "Aussie Rules": {
             AFL: "https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Class/50/Events?displayType=coupon&detailsLevel=O"
         },
+        "Baseball": {
+            MLB: "https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Class/18/Events?displayType=coupon&detailsLevel=O"
+        },
         "Basketball": {
             NBA: "https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Class/16/Events?displayType=coupon&detailsLevel=O"
         },
@@ -17,9 +20,9 @@ export class Sportsbet extends Scraper {
     };
 
     protected marketParser: MarketParser = {
-        HeadToHead: name => name === "Head to Head" || name === "Match Betting",
-        Lines: name => name === "Pick Your Line" || name === "Pick Your Own Line",
-        Totals: name => name === "Pick Your Own Total" || name === "Alternative Total Match Points" || name === "Alternate Total Points"
+        HeadToHead: name => name === "Head to Head" || name === "Match Betting" || name === "Money Line",
+        Lines: name => name === "Pick Your Line" || name === "Pick Your Own Line" || name === "Run Line" || name === "Alternate Run Lines",
+        Totals: name => name === "Pick Your Own Total" || name === "Alternative Total Match Points" || name === "Alternate Total Points" || name === "Total Runs" || name === "Alternate Total Runs"
     };
 
     protected async scrapeComp(compId: string, url: string): Promise<CompData> {
@@ -44,10 +47,10 @@ export class Sportsbet extends Scraper {
     protected async scrapeOffers(compId: string, url: string): Promise<Offers> {
         const data = await Scraper.getDataFromUrl(url) as MatchMarketsResponse;
         const offers: Offers = {};
-        const selectedMarkets = ["Top Markets", "Handicap Markets", "Total Markets", "Total Points Markets"];
+        const selectedMarkets = ["Top Markets", "Handicap Markets", "Run Line Markets", "Margin Markets", "Total Markets", "Total Points Markets"];
         const marketPromises = [];
         for (const marketType of data.marketGrouping.filter(market => selectedMarkets.includes(market.name))) {
-            await new Promise((resolve) => { setTimeout(resolve, 500); });
+            await new Promise((resolve) => { setTimeout(resolve, 750); });
             marketPromises.push(Scraper.getDataFromUrl(`https://www.sportsbet.com.au/apigw/sportsbook-sports/${marketType.httpLink}`) as Promise<MarketsResponse[]>);
         }
         const matchMarkets = await Promise.all(marketPromises);
