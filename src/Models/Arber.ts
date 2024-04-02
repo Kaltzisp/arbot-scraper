@@ -70,7 +70,7 @@ export class Arber {
                 (filter.bookie && !bet.bestOffer.map(offer => offer.bookie).includes(filter.bookie))
             ) { return false; }
             return true;
-        }).splice(0, filter.maxResults ?? 5);
+        }).splice(0, filter.maxResults ?? 10);
         return bets;
     }
 }

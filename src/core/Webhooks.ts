@@ -32,7 +32,7 @@ export class DiscordEmbed {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                embeds: discordEmbeds
+                embeds: discordEmbeds.reverse()
             })
         });
     }
