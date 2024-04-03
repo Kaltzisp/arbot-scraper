@@ -8,9 +8,6 @@ export class Pointsbet extends Scraper {
         "Aussie Rules": {
             AFL: "https://api.au.pointsbet.com/api/v2/competitions/7523/events/featured?includeLive=false"
         },
-        "Baseball": {
-            MLB: "https://api.au.pointsbet.com/api/v2/competitions/112658/events/featured?includeLive=false"
-        },
         "Basketball": {
             NBA: "https://api.au.pointsbet.com/api/v2/competitions/7176/events/featured?includeLive=false"
         },
