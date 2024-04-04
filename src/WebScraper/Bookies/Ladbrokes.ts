@@ -1,5 +1,5 @@
 import { type CompData, type MarketParser, Scraper } from "../Scraper.js";
-import { Match, type Offers } from "../utils/Match.js";
+import { Match, type Offers } from "../../Interfaces/Match.js";
 import { Mapper } from "../utils/Mapper.js";
 
 export class Ladbrokes extends Scraper {
