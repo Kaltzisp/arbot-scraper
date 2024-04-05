@@ -2,13 +2,25 @@ import type { BestOdd, Runner } from "../WebScraper/Runner.js";
 
 export class MatchedBet {
 
-    public constructor(
-        public id: string,
-        public comp: string,
-        public market: string,
-        public startTime: number,
-        public runners: Runner[]
-    ) { }
+    public readonly margins: {
+        [bookie: string]: number;
+    } = {};
+
+    public constructor(public id: string, public comp: string, public market: string, public startTime: number, public runners: Runner[]) {
+        const bookieOdds: { [bookie: string]: number[] | undefined } = {};
+        this.runners.forEach((runner) => {
+            Object.entries(runner.odds).forEach(([bookie, odd]) => {
+                if (bookieOdds[bookie]) {
+                    bookieOdds[bookie]!.push(odd)
+                } else {
+                    bookieOdds[bookie] = [odd]
+                }
+            });
+        });
+        for (const bookie in bookieOdds) {
+            this.margins[bookie] = bookieOdds[bookie]!.length === runners.length ? 1 - 1 / bookieOdds[bookie]!.reduce((sum, odd) => sum + (1 / odd), 0) : NaN;
+        }
+    }
 
     /** Returns the best offer for each side of the matched bet. */
     public get bestOffer(): BestOdd[] {
