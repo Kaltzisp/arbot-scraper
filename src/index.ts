@@ -1,8 +1,8 @@
 // Imports.
 import { type MarketData, Scraper } from "./WebScraper/Scraper.js";
-import { AWSBucket } from "./core/AWSBucket.js";
-import { Arber } from "./Models/Arber.js";
-import { DiscordEmbed } from "./core/Webhooks.js";
+import { AWSBucket } from "./Services/AWSBucket.js";
+import { Analyzer } from "./Analysis/Analyzer.js";
+import { DiscordEmbed } from "./Services/Webhooks.js";
 import type { PutObjectCommandOutput } from "@aws-sdk/client-s3";
 import { configDotenv } from "dotenv";
 import { writeFileSync } from "fs";
@@ -33,15 +33,11 @@ const scrapers: Scraper[] = [
 ];
 
 // Running webscraper on AWS Lambda.
-export async function handler(event: { [key: string]: boolean | string }): Promise<MarketData | PutObjectCommandOutput> {
+export async function handler(): Promise<MarketData | PutObjectCommandOutput> {
     const marketData = await Scraper.getMarketData(scrapers);
-    if (event.test) {
-        return marketData;
-    }
-    const bucket = new AWSBucket();
-    const response = await bucket.push(marketData);
-    const arbot = new Arber();
-    await arbot.loadLatest(marketData);
+    const response = await AWSBucket.push(marketData);
+    const arbot = new Analyzer();
+    await arbot.runModels();
     await DiscordEmbed.post(arbot.filter({
         minEv: 0
     }).map(bet => new DiscordEmbed(bet)));
@@ -50,13 +46,13 @@ export async function handler(event: { [key: string]: boolean | string }): Promi
 
 if (process.argv[2] === "TEST_SCRAPER") {
     // Running webscraper test instance.
-    const data = await handler({ test: true }) as MarketData;
-    writeFileSync("./marketData.json", JSON.stringify(data));
+    const marketData = await Scraper.getMarketData(scrapers);
+    writeFileSync("./marketData.json", JSON.stringify(marketData));
 
 } else if (process.argv[2] === "TEST_MODELS") {
     // Running models test instance.
-    const arbot = new Arber();
-    await arbot.loadLatest();
+    const arbot = new Analyzer();
+    await arbot.runModels("./marketData.json");
     arbot.filter({
         minEv: 0
     }).forEach(bet => bet.print());

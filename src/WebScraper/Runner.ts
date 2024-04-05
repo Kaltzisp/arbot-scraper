@@ -1,15 +1,11 @@
 export class Runner {
 
-    public readonly odds: Odds = {};
-    public bestOffer: BestOdd = {
-        bookie: "",
-        odd: 0
-    };
+    public readonly odds: Odds;
+    public bestOffer: BestOdd;
 
-    public constructor(public name: string, bookie?: string, odd?: number) {
-        if (bookie && odd) {
-            this.addOdd(bookie, odd);
-        }
+    public constructor(public name: string, bookie: string, odd: number) {
+        this.bestOffer = { bookie, odd };
+        this.odds = { [bookie]: odd };
     }
 
     public addOdd(bookie: string, odd: number): void {

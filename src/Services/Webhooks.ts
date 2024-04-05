@@ -1,4 +1,4 @@
-import type { MatchedBet } from "../Models/utils/MatchedBet.js";
+import type { MatchedBet } from "../Analysis/MatchedBet.js";
 
 export class DiscordEmbed {
 
@@ -14,7 +14,7 @@ export class DiscordEmbed {
     private readonly footer;
 
     public constructor(bet: MatchedBet) {
-        this.title = bet.matchId;
+        this.title = bet.id;
         this.description = bet.market;
         this.color = DiscordEmbed.getColor(bet.ev);
         this.addField("EV (%)", (bet.ev * 100).toFixed(2), true);

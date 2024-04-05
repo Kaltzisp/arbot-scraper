@@ -1,9 +1,10 @@
-import type { BestOdd, Runner } from "./Runner.js";
+import type { BestOdd, Runner } from "../WebScraper/Runner.js";
 
 export class MatchedBet {
 
     public constructor(
-        public matchId: string,
+        public id: string,
+        public comp: string,
         public market: string,
         public startTime: number,
         public runners: Runner[]
@@ -49,7 +50,7 @@ export class MatchedBet {
     /** Prints a matched bet to the console. */
     public print(): void {
         let output = `${"=".repeat(65)}\n`;
-        output += `${this.matchId} - ${this.market}\n`;
+        output += `${this.id} - ${this.market}\n`;
         output += `EV = ${(this.ev * 100).toFixed(2)}%    Yield = ${(this.yield * 100).toFixed(2)}%\n\n`;
         this.runners.forEach((runner) => {
             output += `${runner.name} @ $${runner.bestOffer.odd} on ${runner.bestOffer.bookie}\n`
@@ -60,6 +61,6 @@ export class MatchedBet {
     }
 
     public toString(): string {
-        return this.matchId;
+        return this.id;
     }
 }

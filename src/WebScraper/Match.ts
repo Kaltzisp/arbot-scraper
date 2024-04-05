@@ -1,5 +1,5 @@
 import { Mapper } from "./utils/Mapper.js";
-import { Runner } from "../Models/utils/Runner.js";
+import { Runner } from "./Runner.js";
 
 export class Match {
 

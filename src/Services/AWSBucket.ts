@@ -1,12 +1,12 @@
 import { GetObjectCommand, ListObjectsCommand, PutObjectCommand, type PutObjectCommandOutput, S3Client } from "@aws-sdk/client-s3";
 import type { MarketData } from "../WebScraper/Scraper.js";
 
-export class AWSBucket {
+export const AWSBucket = {
 
-    public readonly client: S3Client = new S3Client({ region: "ap-southeast-4", });
-    private readonly bucketName = "arbot-webscraper-bucket";
+    client: new S3Client({ region: "ap-southeast-4", }),
+    bucketName: "arbot-webscraper-bucket",
 
-    public async push(marketData: MarketData): Promise<PutObjectCommandOutput> {
+    async push(marketData: MarketData): Promise<PutObjectCommandOutput> {
         const response = await this.client.send(new PutObjectCommand({
             Bucket: this.bucketName,
             Key: `marketData-${this.dateTime(marketData.meta.scrapedAt)}`,
@@ -14,9 +14,9 @@ export class AWSBucket {
             ContentType: "application/json"
         }));
         return response;
-    }
+    },
 
-    public async getLatest(): Promise<MarketData> {
+    async getLatest(): Promise<MarketData> {
         const bucketResponse = await this.client.send(new ListObjectsCommand({
             Bucket: this.bucketName
         }));
@@ -27,11 +27,11 @@ export class AWSBucket {
         }));
         const json = await fileResponse.Body?.transformToString();
         return JSON.parse(json!) as MarketData;
-    }
+    },
 
-    public dateTime(ms: number): string {
+    dateTime(ms: number): string {
         const date = new Date(ms);
         return `D${date.toISOString().substring(0, 19).replace(/[-:]/gu, "")}`
-    };
+    }
 
 }
