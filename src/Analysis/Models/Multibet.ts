@@ -1,25 +1,27 @@
-import type { Matches } from "../../WebScraper/Match.js";
+import type { MatchedBet } from "../MatchedBet.js";
 
 export const Multibet = {
 
-    findMultis(bookie: string, comp: string, allMatches: Matches, nLegs?: number): unknown {
-        const matches = Object.values(allMatches).filter((match) => {
-            if (!match?.markets.HeadToHead || match.comp !== comp) {
-                return false;
-            }
-            // eslint-disable-next-line @typescript-eslint/consistent-return
-            Object.values(match.markets.HeadToHead).map(runner => Object.keys(runner!.odds)).forEach((bookieList) => {
-                if (!bookieList.includes(bookie)) {
-                    return false;
-                }
+    findMultis(bookie: string, matches: MatchedBet[], minOdds?: number, nLegs?: number): unknown {
+        // Sorting matches by bookie margin.
+        let legs = matches.sort((a, b) => a.margins[bookie] - b.margins[bookie]);
+        // Filtering matches by minimum odds.
+        legs = matches.filter(match => match.bestOffer.reduce((minOdd, offer) => Math.min(minOdd, offer.odd), Infinity) > (minOdds ?? 0));
+        // Filtering matches that have identical odds, as they are functionally identical in a multi.
+        legs = legs.filter((leg, idx) => leg.runners.map(runner => runner.odds[bookie]).sort((a, b) => a - b).join("-") !== legs[idx - 1]?.runners.map(runner => runner.odds[bookie]).sort((a, b) => a - b).join("-"));
+        // Selecting the 50 matches with the lowest margins.
+        legs = legs.splice(0, 50);
+        legs.forEach((leg) => {
+            leg.runners.forEach((runner) => {
+                runner.name = `${leg.id} - ${leg.market}: ${runner.name}`;
             });
-            return true;
         });
-        const multis = this.matchCombinations(matches, nLegs ?? 3);
-        const outcomes = multis.map(multi => this.multiOutcomes(multi.map(match => Object.values(match!.markets.HeadToHead!)))).flat();
+        const multis = this.matchCombinations(legs, nLegs ?? 3);
+        const outcomes = multis.map(multi => this.multiOutcomes(multi.map(runner => runner.runners))).flat();
         const multiBets = outcomes.map(multi => ({
-            multi: multi.map(runner => `${runner!.name} @ ${runner!.odds[bookie]}`).join(", "),
-            ev: this.multiEv(multi.map(runner => runner!.odds[bookie]))
+            multi: multi.map(runner => `${runner.name} @ ${runner.odds[bookie]}`),
+            ev: this.multiEv(multi.map(runner => runner.odds[bookie])),
+            odds: multi.reduce((product, runner) => product * runner.odds[bookie], 1)
         })).sort((a, b) => b.ev - a.ev);
         return multiBets[0];
     },
