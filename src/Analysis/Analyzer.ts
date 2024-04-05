@@ -58,6 +58,7 @@ export class Analyzer {
                 (!filter.inPlay && Date.now() > bet.startTime) ||
                 (filter.match && !bet.id.includes(filter.match)) ||
                 (filter.comp && bet.comp !== filter.comp) ||
+                (filter.market && bet.market !== filter.market) ||
                 (filter.bookie && !bet.bestOffer.map(offer => offer.bookie).includes(filter.bookie)) ||
                 (filter.hasBookie && !bet.runners.flat().map(runner => Object.keys(runner.odds)).flat().includes(filter.hasBookie))
             ) { return false; }
@@ -71,6 +72,7 @@ export class Analyzer {
 interface MatchedBetFilter {
     match?: string;
     comp?: string;
+    market?: string;
     bookie?: string;
     hasBookie?: string;
     minEv?: number;
