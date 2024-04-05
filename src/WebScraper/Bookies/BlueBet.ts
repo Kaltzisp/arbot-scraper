@@ -17,7 +17,7 @@ export class Bluebet extends Scraper {
     };
 
     protected marketParser: MarketParser = {
-        HeadTohHead: name => name === "Match Result" || name === "Money Line",
+        HeadToHead: name => name === "Match Result" || name === "Money Line",
         Lines: name => name === "Pick Your Own Line" || name.startsWith("Point Spread "),
         Totals: name => name.startsWith("Total Points Over/Under")
     };
