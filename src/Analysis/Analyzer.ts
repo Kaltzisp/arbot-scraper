@@ -57,6 +57,7 @@ export class Analyzer {
                 (bet.yield < (filter.minYield ?? -Infinity)) ||
                 (!filter.inPlay && Date.now() > bet.startTime) ||
                 (filter.match && !bet.id.includes(filter.match)) ||
+                ((filter.startsWithin ?? Infinity) * 3600000 + Date.now() < bet.startTime) ||
                 (filter.comp && bet.comp !== filter.comp) ||
                 (filter.market && bet.market !== filter.market) ||
                 (filter.bookie && !bet.bestOffer.map(offer => offer.bookie).includes(filter.bookie)) ||
@@ -80,4 +81,5 @@ interface MatchedBetFilter {
     sort?: "ev" | "yield";
     maxResults?: number;
     inPlay?: boolean;
+    startsWithin?: number;
 }
