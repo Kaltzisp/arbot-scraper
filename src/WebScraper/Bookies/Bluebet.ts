@@ -30,20 +30,22 @@ export class Bluebet extends Scraper {
     protected async scrapeComp(compId: string, url: string): Promise<CompData> {
         const data = await Scraper.getDataFromUrl(url, this.headers) as MatchesResponse;
         const comp: CompData = {};
-        await Promise.all(data.MasterCategories[0].Categories[0].MasterEvents.map(async (event) => {
-            const teams = event.MasterEventName.split(/ [@v] /u);
-            const match = new Match(
-                compId,
-                teams[0],
-                teams[1],
-                event.MaxAdvertisedStartTime,
-                await this.scrapeOffers(compId, `https://web20-api.bluebet.com.au/MasterEvent?MasterEventId=${event.MasterEventId}`).catch((e: unknown) => {
-                    console.error(e);
-                    return {};
-                })
-            );
-            comp[match.id] = match;
-        }));
+        if (data.MasterCategories) {
+            await Promise.all(data.MasterCategories[0].Categories[0].MasterEvents.map(async (event) => {
+                const teams = event.MasterEventName.split(/ [@v] /u);
+                const match = new Match(
+                    compId,
+                    teams[0],
+                    teams[1],
+                    event.MaxAdvertisedStartTime,
+                    await this.scrapeOffers(compId, `https://web20-api.bluebet.com.au/MasterEvent?MasterEventId=${event.MasterEventId}`).catch((e: unknown) => {
+                        console.error(e);
+                        return {};
+                    })
+                );
+                comp[match.id] = match;
+            }));
+        }
         return comp;
     }
 
@@ -78,7 +80,7 @@ interface MatchesResponse {
                 MaxAdvertisedStartTime: string;
             }[];
         }[];
-    }[];
+    }[] | undefined;
 }
 
 interface MarketsResponse {
