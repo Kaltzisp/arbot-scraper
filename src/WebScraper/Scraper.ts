@@ -46,7 +46,7 @@ export abstract class Scraper {
             bookieData[sportId] = {};
             const comps = this.bookieEndpoints[sportId];
             await Promise.all(Object.entries(comps).map(async ([compId, url]) => {
-                const compData = await this.scrapeComp(compId, url);
+                const compData = await this.scrapeComp(compId, url).catch(() => ({}));
                 bookieData[sportId][compId] = compData;
             }));
         }
