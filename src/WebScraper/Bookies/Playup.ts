@@ -44,7 +44,7 @@ export class Playup extends Scraper {
     protected async scrapeOffers(compId: string, url: string): Promise<Offers> {
         const marketsData = await Scraper.getDataFromUrl(url) as MatchMarketsResponse;
         const offers: Offers = {};
-        const selectedMarkets = ["Top Markets", "Handicap Markets", "Total Markets"];
+        const selectedMarkets = ["Top Markets", "Handicap Markets", "Total Markets", "Total Points Markets"];
         await Promise.all(marketsData.included.filter(market => selectedMarkets.includes(market.attributes.name)).map(async (marketType) => {
             const data = await Scraper.getDataFromUrl(`https://wagering-api.playup.io/v1/event_market_groups/${marketType.id}`) as MarketsResponse;
             for (const entry of data.included) {
