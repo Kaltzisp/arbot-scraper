@@ -55,7 +55,7 @@ export class Ladbrokes extends Scraper {
         const offers: Offers = {};
         for (const runnerId in data.entrants) {
             const runner = data.entrants[runnerId];
-            const marketName = this.parseMarketName(data.markets[runner.market_id].name);
+            const marketName = data.markets[runner.market_id] ? this.parseMarketName(data.markets[runner.market_id]!.name) : false;
             if (marketName) {
                 offers[marketName] ??= {};
                 const odds = data.prices[Object.keys(data.prices).find(id => id.startsWith(runnerId))!].odds;
@@ -94,7 +94,7 @@ interface MarketsResponse {
     markets: {
         [marketId: string]: {
             name: string;
-        }
+        } | undefined;
     };
     prices: {
         [priceId: string]: {
