@@ -40,7 +40,7 @@ export async function handler(): Promise<MarketData | PutObjectCommandOutput> {
     const response = await AWSBucket.push(marketData);
     const arbot = new Analyzer();
     await arbot.runModels();
-    await DiscordEmbed.post(arbot.filter({
+    await DiscordEmbed.post(process.env.DISCORD_WEBHOOK_URL!, arbot.filter({
         minEv: 0
     }).map(bet => new DiscordEmbed(bet)));
     return response;

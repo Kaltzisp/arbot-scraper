@@ -27,8 +27,8 @@ export class DiscordEmbed {
         };
     }
 
-    public static async post(discordEmbeds: DiscordEmbed[]): Promise<void> {
-        await fetch(process.env.DISCORD_WEBHOOK_URL!, {
+    public static async post( webhookUrl: string, discordEmbeds: DiscordEmbed[]): Promise<void> {
+        await fetch(webhookUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
