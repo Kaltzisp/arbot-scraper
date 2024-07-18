@@ -92,6 +92,7 @@ export const MAPPINGS: Mappings = {
         "Manly Warringah Sea Eagles": ["Manly Warringah Sea Eagles", "Manly Sea Eagles"],
         "Melbourne Storm": ["Melbourne Storm"],
         "Newcastle Knights": ["Newcastle Knights"],
+        "New South Wales Blues": ["New South Wales Blues"],
         "New Zealand Warriors": ["New Zealand Warriors"],
         "North Queensland Cowboys": ["North Queensland Cowboys", "Nth Queensland Cowboys", "Nth Qld", "NQld"],
         "Parramatta Eels": ["Parramatta Eels"],

@@ -41,7 +41,7 @@ export async function handler(): Promise<MarketData | PutObjectCommandOutput> {
     const arbot = new Analyzer();
     await arbot.runModels();
     await DiscordEmbed.post(process.env.DISCORD_WEBHOOK_URL!, arbot.filter({
-        minEv: 0
+        minEv: 0.005
     }).map(bet => new DiscordEmbed(bet)));
     return response;
 }
