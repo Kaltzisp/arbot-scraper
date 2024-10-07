@@ -2,7 +2,7 @@ import { type CompData, type MarketParser, Scraper } from "../Scraper.js";
 import { Match, type Offers } from "../Match.js";
 import { Mapper } from "../utils/Mapper.js";
 
-export class Bluebet extends Scraper {
+export class Betr extends Scraper {
 
     protected bookieEndpoints = {
         "Aussie Rules": {
@@ -10,6 +10,9 @@ export class Bluebet extends Scraper {
         },
         "Basketball": {
             NBA: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=39251"
+        },
+        "Ice Hockey": {
+            NHL: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=39251"
         },
         "Rugby League": {
             NRL: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=42626"
@@ -24,7 +27,7 @@ export class Bluebet extends Scraper {
 
     private readonly headers = {
         "Content-Type": "application/json",
-        "Origin": "https://www.bluebet.com.au"
+        "Origin": "https://www.betr.com.au"
     };
 
     protected async scrapeComp(compId: string, url: string): Promise<CompData> {
