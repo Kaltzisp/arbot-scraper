@@ -12,7 +12,7 @@ export class Betr extends Scraper {
             NBA: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=39251"
         },
         "Ice Hockey": {
-            NHL: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=39251"
+            NHL: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=39252"
         },
         "Rugby League": {
             NRL: "https://web20-api.bluebet.com.au/SportsCategory?CategoryId=42626"
