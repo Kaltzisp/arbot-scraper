@@ -11,6 +11,9 @@ export class Palmerbet extends Scraper {
         "Basketball": {
             NBA: "https://fixture.palmerbet.online/fixtures/sports/1c2eeb3a-6bab-4ac2-b434-165cc350180f/matches"
         },
+        "Ice Hockey": {
+            NHL: "https://fixture.palmerbet.online/fixtures/sports/0dcce9d0-3aa7-4aa3-a9ba-8075647054f7/matches"
+        },
         "Rugby League": {
             NRL: "https://fixture.palmerbet.online/fixtures/sports/9587e5c4-8dd8-403d-b516-6dd69d2f42ef/matches"
         }

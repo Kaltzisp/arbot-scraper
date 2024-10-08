@@ -11,6 +11,9 @@ export class Ladbrokes extends Scraper {
         "Basketball": {
             NBA: "https://api.ladbrokes.com.au/v2/sport/event-request?category_ids=%5B%223c34d075-dc14-436d-bfc4-9272a49c2b39%22%5D"
         },
+        "Ice Hockey": {
+            NHL: "https://api.ladbrokes.com.au/v2/sport/event-request?category_ids=%5B%22b7c1f944-d02b-4d9b-b6f3-cb31389cfe36%22%5D"
+        },
         "Rugby League": {
             NRL: "https://api.ladbrokes.com.au/v2/sport/event-request?category_ids=%5B%22608a1803-45bc-465a-8471-c89dcb68a27d%22%5D&competition_id=3e85a456-59b5-4363-95e6-836854492fdf"
         }

@@ -11,6 +11,9 @@ export class Playup extends Scraper {
         "Basketball": {
             NBA: "https://wagering-api.playup.io/v1/sport_events/?filter[competition_id]=124"
         },
+        "Ice Hockey": {
+            NHL: "https://wagering-api.playup.io/v1/sport_events/?filter[competition_id]=456"
+        },
         "Rugby League": {
             NRL: "https://wagering-api.playup.io/v1/sport_events/?filter[competition_id]=68"
         }

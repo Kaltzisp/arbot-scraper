@@ -11,6 +11,9 @@ export class Sportsbet extends Scraper {
         "Basketball": {
             NBA: "https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Class/16/Events?displayType=coupon&detailsLevel=O"
         },
+        "Ice Hockey": {
+            NHL: "https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Class/38/Events?displayType=coupon&detailsLevel=O"
+        },
         "Rugby League": {
             NRL: "https://www.sportsbet.com.au/apigw/sportsbook-sports/Sportsbook/Sports/Class/23/Events?displayType=coupon&detailsLevel=O"
         }

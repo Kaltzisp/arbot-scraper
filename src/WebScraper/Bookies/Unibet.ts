@@ -11,6 +11,9 @@ export class Unibet extends Scraper {
         "Basketball": {
             NBA: "https://www.unibet.com.au/sportsbook-feeds/views/filter/basketball/nba/all/matches?ncid=1711759504"
         },
+        "Ice Hockey": {
+            NHL: "https://www.unibet.com.au/sportsbook-feeds/views/filter/ice_hockey/nhl/all/matches?ncid=1728345975"
+        },
         "Rugby League": {
             NRL: "https://www.unibet.com.au/sportsbook-feeds/views/filter/rugby_league/nrl/all/matches?ncid=1711595601"
         }

@@ -11,6 +11,9 @@ export class Pointsbet extends Scraper {
         "Basketball": {
             NBA: "https://api.au.pointsbet.com/api/v2/competitions/7176/events/featured?includeLive=false"
         },
+        "Ice Hockey": {
+            NHL: "https://api.au.pointsbet.com/api/v2/competitions/158858/events/featured?includeLive=false"
+        },
         "Rugby League": {
             NRL: "https://api.au.pointsbet.com/api/v2/competitions/7593/events/featured?includeLive=false"
         },

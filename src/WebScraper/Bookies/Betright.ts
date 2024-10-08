@@ -8,9 +8,12 @@ export class Betright extends Scraper {
         "Aussie Rules": {
             AFL: "https://next-api.betright.com.au/Sports/Category?categoryId=79"
         },
-        // "Basketball": {
-        //     NBA: "https://next-api.betright.com.au/Sports/Category?categoryId=54"
-        // },
+        "Basketball": {
+            NBA: "https://next-api.betright.com.au/Sports/Category?categoryId=54"
+        },
+        "Ice Hockey": {
+            NHL: "https://next-api.betright.com.au/Sports/Category?categoryId=75"
+        },
         "Rugby League": {
             NRL: "https://next-api.betright.com.au/Sports/Category?categoryId=60"
         }

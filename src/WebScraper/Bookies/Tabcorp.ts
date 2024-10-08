@@ -11,6 +11,9 @@ export class Tabcorp extends Scraper {
         "Basketball": {
             NBA: "https://api.beta.tab.com.au/v1/tab-info-service/sports/Basketball/competitions/NBA?jurisdiction=NSW"
         },
+        "Ice Hockey": {
+            NHL: "https://api.beta.tab.com.au/v1/tab-info-service/sports/Ice%20Hockey/competitions/NHL?jurisdiction=NSW"
+        },
         "Rugby League": {
             NRL: "https://api.beta.tab.com.au/v1/tab-info-service/sports/Rugby%20League/competitions/NRL?jurisdiction=NSW"
         }
