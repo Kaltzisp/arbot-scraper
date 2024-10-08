@@ -8,8 +8,8 @@ import { configDotenv } from "dotenv";
 import { writeFileSync } from "fs";
 
 // Scraper imports.
+import { Betr } from "./WebScraper/Bookies/Betr.js";
 import { Betright } from "./WebScraper/Bookies/Betright.js";
-import { Bluebet } from "./WebScraper/Bookies/Bluebet.js";
 import { Ladbrokes } from "./WebScraper/Bookies/Ladbrokes.js";
 import { Palmerbet } from "./WebScraper/Bookies/Palmerbet.js";
 import { Playup } from "./WebScraper/Bookies/Playup.js";
@@ -24,7 +24,7 @@ configDotenv();
 // Defining scrapers.
 const scrapers: Scraper[] = [
     new Betright(),
-    new Bluebet(),
+    new Betr(),
     new Ladbrokes(),
     new Palmerbet(),
     new Playup(),
